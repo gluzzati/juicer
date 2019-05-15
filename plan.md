@@ -5,18 +5,28 @@
 * v1.x deliverable
 
 # Timeline
-##  phase 1 - 19/5
+##  phase 1 - ends 19/5
 
 * define MQ framework
 * define state, headers / python defs
 * GUI framweork
   * stub dashboard 
   * two panes / debug -> whole state log
-* daemons mockups - weight, rfid 
+* daemons: weight, rfid
+  * define tests
+  * code mockups 
 * buy darlington for relayboard
+ 
+
 * solder rfid board
 * rfidboard helloworld
 
-## phase 2 - 26/5
+## phase 2 - ends 22/5
 
 * have v0.1 working
+* renegotiate requirements
+* get to v1.0
+
+## phase 3 - ends deadline
+
+* test
