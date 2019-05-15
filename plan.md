@@ -7,6 +7,7 @@
 # Timeline
 ##  phase 1 - ends 19/5
 
+* buy 12v supply (and 5v?)
 * define MQ framework
 * define state, headers / python defs
 * GUI framweork
