@@ -1,0 +1,3 @@
+[submodule "lib/c-periphery"]
+	path = lib/c-periphery
+	url = https://github.com/vsergeev/c-periphery.git
