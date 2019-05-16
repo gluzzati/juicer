@@ -1,6 +1,5 @@
-from time import strftime
-
 import sys
+from time import strftime
 
 
 def timestamp():

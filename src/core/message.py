@@ -1,7 +1,8 @@
 import json
-from core import log
-from core import handlers
 from types import SimpleNamespace as Namespace
+
+from core import handlers
+from core import log
 
 KILLMSG = "@@__DIENOW__PLEASE__@@"
 

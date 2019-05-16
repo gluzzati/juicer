@@ -1,7 +1,8 @@
 #!/usr/bin/python3
+import argparse
+
 from core.context import Context
 from core.core import Mainloop
-import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument("port", help="port to bind to", type=int)

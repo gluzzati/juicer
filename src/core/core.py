@@ -1,6 +1,4 @@
-import errno
 import math
-import os
 
 from . import log
 from . import message
@@ -30,10 +28,10 @@ def get_handler(msgtype):
 
 
 def handle_msg(ctx, msg):
-    result = Result()
 
     if not isinstance(msg, Message):
         log.error("invalid message")
+        result = Result()
         result.ok = False
         return result
 
