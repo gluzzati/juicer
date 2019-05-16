@@ -1,11 +1,12 @@
 #!/usr/bin/python3
 import sys
-
+from core.context import Context
 from core.core import Mainloop
 
 
 def main():
-    loop = Mainloop()
+    context = Context()
+    loop = Mainloop(context)
     return loop.run(sys.argv)
 
 

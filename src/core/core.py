@@ -1,15 +1,15 @@
 import errno
+import math
+import os
 
 from . import log
 from . import message
 from . import result
-import os
-import math
 
 Result = result.Result
 Message = message.Message
 
-PATH = "./pipe"
+PATH = "pipe"
 try:
     os.mkfifo(PATH)
 except OSError as oe:
@@ -19,21 +19,19 @@ except OSError as oe:
 MAX = int(math.pow(2, 19))  # 512K
 
 
-def get_msg():
-    pipe = os.open(PATH, os.O_RDONLY)
-    data = os.read(pipe, MAX)
-    os.close(pipe)
+def get_msg(ctx):
+    data, addr = ctx.sock.recvfrom(MAX)
     return Message(data.decode())
 
 
-def get_handler(type):
-    if type not in message.handlers:
+def get_handler(msgtype):
+    if msgtype not in message.handlers:
         return message.handlers[message.MsgTypes.INVALID]
     else:
-        return message.handlers[type]
+        return message.handlers[msgtype]
 
 
-def handle_msg(mainloop, msg):
+def handle_msg(ctx, msg):
     result = Result()
 
     if not isinstance(msg, Message):
@@ -54,15 +52,16 @@ def handle_msg(mainloop, msg):
 
 
 class Mainloop:
-    def __init__(self):
+    def __init__(self, context):
         self.running = True
+        self.ctx = context
 
     def run(self, args):
 
         while self.running:
-            msg = get_msg()
+            msg = get_msg(self.ctx)
             if msg.valid:
-                result = handle_msg(self, msg)
+                result = handle_msg(self.ctx, msg)
                 if not result.ok:
                     log.error("error handling message")
 
