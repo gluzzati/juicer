@@ -16,12 +16,17 @@ except OSError as oe:
     if oe.errno != errno.EEXIST:
         raise
 
-MAX = int(math.pow(2, 19))  # 512K
+MAX = int(math.pow(2, 16))  # 64K
 
 
 def get_msg(ctx):
     data, addr = ctx.sock.recvfrom(MAX)
-    return Message(data.decode())
+
+    if data.decode() == message.KILLMSG:
+        ctx.running = False
+        return False, None
+
+    return True, Message(data.decode())
 
 
 def get_handler(msgtype):
@@ -53,16 +58,18 @@ def handle_msg(ctx, msg):
 
 class Mainloop:
     def __init__(self, context):
-        self.running = True
         self.ctx = context
+        self.ctx.running = True
 
-    def run(self, args):
+    def run(self):
 
-        while self.running:
-            msg = get_msg(self.ctx)
+        while self.ctx.running:
+            ok, msg = get_msg(self.ctx)
+            if not ok:
+                continue
             if msg.valid:
-                result = handle_msg(self.ctx, msg)
-                if not result.ok:
+                res = handle_msg(self.ctx, msg)
+                if not res.ok:
                     log.error("error handling message")
 
         return 0

@@ -1,13 +1,17 @@
 #!/usr/bin/python3
-import sys
 from core.context import Context
 from core.core import Mainloop
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("port", help="port to bind to", type=int)
+args = parser.parse_args()
 
 
 def main():
-    context = Context()
+    context = Context(args)
     loop = Mainloop(context)
-    return loop.run(sys.argv)
+    return loop.run()
 
 
 if __name__ == "__main__":
