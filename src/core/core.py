@@ -9,13 +9,6 @@ from . import result
 Result = result.Result
 Message = message.Message
 
-PATH = "pipe"
-try:
-    os.mkfifo(PATH)
-except OSError as oe:
-    if oe.errno != errno.EEXIST:
-        raise
-
 MAX = int(math.pow(2, 16))  # 64K
 
 
