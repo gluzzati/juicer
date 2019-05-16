@@ -17,21 +17,21 @@ def is_valid(msg):
 
 def handle_msg(mainloop, msg):
 	result = Result()
-	if not is_valid(msg):
-		result.ok = False
-		return result
+
 	log(msg.type)
-	handler = get_handler(msg.type)
-	if handler == null:
+
+	if msg.type not in mainloop.handlers:
 		result.ok = False
 		return result
 	else:
+		handler = mainloop[msg.type]
 		result = handler(msg)
 		return result
 
 class Mainloop:
 	def __init__(self):
 		self.running = True
+		self.handlers = load_handlers()
 
 	def run(self, args):
 
