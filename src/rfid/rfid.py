@@ -24,7 +24,7 @@ class RFID:
 
 	def read_id_no_block(self):
 		try:
-			tag = self.read_id_no_block()
+			tag = self.reader.read_id_no_block()
 			res = True
 		except Exception as e:
 			log.error("error reading rfid: " + str(e))
