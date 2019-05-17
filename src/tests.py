@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+import argparse
+import sys
 import threading
 import time
 from queue import Queue
@@ -9,7 +11,7 @@ from core.events import Event, Handlers
 from core.evtconsumer import EvtConsumer
 from core.water_machine import WaterMachine
 from gui.gui import TextGui
-from scale.scale import ScaleEmulator
+from scale.scale import ScaleEmulator, Scale
 
 
 class Object(object):
@@ -90,11 +92,10 @@ def timeout(tout, a, b):
 	return False
 
 
-def main():
+def core_test():
 	main_t = MainThread()
 	main_t.set_queue(main_queue)
 	main_t.start()
-	log.ok("started main thread")
 
 	send_invalid(main_queue)
 	assert (context.state_machine.state == WaterMachine.State.UNINIT)
@@ -109,12 +110,46 @@ def main():
 	send_rfid("ifoifjo23iofj", main_queue)
 	assert (timeout(0.01, context.state_machine.state, WaterMachine.State.GLASS_ON))
 
-	log.ok("killing main thread")
 	send_killevt(main_queue)
-
 	main_t.join()
 	assert (main_t.retcode == 0)
 
 
+def scale_test():
+	log.ok("testing scale..")
+	for i in range(10):
+		w = Scale().get_weight()
+		log.ok("weight = " + str(w))
+		assert w is not None
+
+
+def rfid_test():
+	log.ok("testing rfid..")
+	pass
+
+
+def relay_test():
+	log.ok("testing relay..")
+
+
 if __name__ == "__main__":
-	main()
+	parser = argparse.ArgumentParser()
+	parser.add_argument('--scale', help='perform scale test', action='store_true')
+	parser.add_argument('--rfid', help='perform rfid test', action='store_true')
+	parser.add_argument('--relay', help='perform relay board test', action='store_true')
+	parser.add_argument('--allio', help='perform all sensors/io tests', action='store_true')
+	parser.add_argument('--all', help='perform all tests', action='store_true')
+	parser.add_argument('--core', help='perform core test', action='store_true')
+
+	args = parser.parse_args()
+	if len(sys.argv) == 1:
+		args.all = True
+
+	if args.scale or args.all or args.allio:
+		scale_test()
+	if args.rfid or args.all or args.allio:
+		rfid_test()
+	if args.relay or args.all or args.allio:
+		relay_test()
+	if args.core or args.all:
+		core_test()
