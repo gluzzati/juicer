@@ -31,7 +31,7 @@ class Context:
 			self.state_machine.state = state
 
 	def start_pouring(self):
-		log.ok("starting pouring water...")
+		log.ok("issuing startpour")
 
 	def stop_pouring(self):
-		log.ok("stopping pouring water...")
+		log.ok("issuing stoppouring")

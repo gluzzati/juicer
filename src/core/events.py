@@ -22,7 +22,7 @@ class Handlers:
 
 	@staticmethod
 	def rfid_detected(ctx, evt):
-		log.debug("rfid detected: " + str(evt.rfid))
+		log.debug("rfid detected handler: " + str(evt.rfid))
 
 		if ctx.state_machine.state != WaterMachine.State.IDLE:
 			log.error("machine not ready! " + ctx.state_machine.state)
@@ -42,11 +42,13 @@ class Handlers:
 
 	@staticmethod
 	def rfid_removed(ctx, evt):
-		if ctx.get_state() == WaterMachine.State.IDLE:
-			log.debug("removed rfid, but state was IDLE already, mumble mumble...")
-		else:
+		log.debug("rfid removed handler")
+		if ctx.get_state() is WaterMachine.State.GLASS_ON:
 			ctx.stop_pouring()
 			ctx.set_state(WaterMachine.State.IDLE)
+		else:
+			log.debug("removed rfid, but there was no glass, mumble mumble...")
+
 		return True, None
 
 	@staticmethod

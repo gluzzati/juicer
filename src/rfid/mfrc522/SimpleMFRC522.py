@@ -1,4 +1,5 @@
 # Code by Simon Monk https://github.com/simonmonk/
+import time
 
 from . import MFRC522
 
@@ -18,9 +19,10 @@ class SimpleMFRC522:
 			id, text = self.read_no_block()
 		return id, text
 
-	def read_id(self):
+	def read_id(self, timeout=0):
+		start = time.time()
 		id = self.read_id_no_block()
-		while not id:
+		while not id and not (0 < timeout < time.time() - start):
 			id = self.read_id_no_block()
 		return id
 
