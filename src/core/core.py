@@ -1,66 +1,51 @@
 import math
 
-from . import log
-from . import message
-from . import result
-
-Result = result.Result
-Message = message.Message
+from core import log
+from core.event import Event
 
 MAX = int(math.pow(2, 16))  # 64K
 
 
-def get_msg(ctx):
-    data, addr = ctx.sock.recvfrom(MAX)
+def get_evt(ctx):
+	evt = ctx.queue.get(True)
 
-    if data.decode() == message.KILLMSG:
-        ctx.running = False
-        return False, None
+	if not isinstance(evt, Event):
+		log.error("not an event (" + str(type(evt)) + ")")
+		return False, None
 
-    return True, Message(data.decode())
+	if evt.type == Event.SIGINT:
+		ctx.running = False
+		return False, None
 
-
-def get_handler(msgtype):
-    if msgtype not in message.handlers:
-        return message.handlers[message.MsgTypes.INVALID]
-    else:
-        return message.handlers[msgtype]
+	return True, evt
 
 
-def handle_msg(ctx, msg):
-
-    if not isinstance(msg, Message):
-        log.error("invalid message")
-        res = Result()
-        res.ok = False
-        return res
-
-    handler = get_handler(msg.type)
-    try:
-        res = handler(msg)
-    except AttributeError as e:
-        log.error("malformed object")
-        log.error(str(e))
-        res = Result()
-        res.ok = False
-
-    return res
+def unknown_event(evt):
+	log.error("unknown evt \"" + evt.type + "\"")
 
 
 class Core:
-    def __init__(self, context):
-        self.ctx = context
-        self.ctx.running = True
+	def __init__(self, context):
+		self.ctx = context
+		self.ctx.running = True
+		self.handlers = dict()
+		self.handle_unknown_evt = unknown_event
 
-    def run(self):
+	def add_handler(self, evt_type, handler):
+		self.handlers[evt_type] = handler
 
-        while self.ctx.running:
-            ok, msg = get_msg(self.ctx)
-            if not ok:
-                continue
-            if msg.valid:
-                res = handle_msg(self.ctx, msg)
-                if not res.ok:
-                    log.error("error handling message")
+	def run(self):
 
-        return 0
+		while self.ctx.running:
+			ok, evt = get_evt(self.ctx)
+
+			if not ok:
+				continue
+
+			if evt.type not in self.handlers:
+				self.handle_unknown_evt(evt)
+				continue
+
+			self.handlers[evt.type](evt)
+
+		return 0
