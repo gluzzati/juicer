@@ -1,0 +1,13 @@
+digraph {
+    UNINIT
+    IDLE
+    GLASS_ON
+    POURING
+ 
+    UNINIT -> IDLE [label="initialize"]
+    IDLE -> GLASS_ON [label="rfid_present"]
+    GLASS_ON -> IDLE [label="rfid_timeout"]
+    GLASS_ON -> POURING [label="fill_requested"]
+    POURING -> GLASS_ON [label="stop_requested"]
+    POURING -> IDLE [label="rfid_timeout"]
+}
