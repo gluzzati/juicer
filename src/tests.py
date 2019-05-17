@@ -128,7 +128,7 @@ def rfid_test():
 	log.ok("testing rfid [timeout in 10s!]")
 	rfid = RFID()
 	ok, tag = rfid.read_id()
-	log.yay("read tag " + tag)
+	log.yay("read tag " + str(tag))
 	timeout(10, ok, True)
 	pass
 
