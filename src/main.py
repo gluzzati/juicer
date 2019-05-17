@@ -10,10 +10,15 @@ args = parser.parse_args()
 
 
 def main():
-    context = Context(args)
-    loop = Core(context)
-    return loop.run()
+	# start
+	# - core thread
+	# - gui thread
+	# - rfid thread
+
+	context = Context(args)
+	loop = Core(context)
+	return loop.run()
 
 
 if __name__ == "__main__":
-    main()
+	main()

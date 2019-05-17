@@ -25,6 +25,9 @@ def unknown_event(evt):
 
 
 class Core:
+	"""
+	waits for events, acts upon them
+	"""
 	def __init__(self, context):
 		self.ctx = context
 		self.ctx.running = True
@@ -35,7 +38,6 @@ class Core:
 		self.handlers[evt_type] = handler
 
 	def run(self):
-
 		while self.ctx.running:
 			ok, evt = get_evt(self.ctx)
 
