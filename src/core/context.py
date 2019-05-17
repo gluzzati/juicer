@@ -29,3 +29,9 @@ class Context:
 			pass
 		else:
 			self.state_machine.state = state
+
+	def start_pouring(self):
+		log.ok("starting pouring water...")
+
+	def stop_pouring(self):
+		log.ok("stopping pouring water...")
