@@ -1,14 +1,15 @@
 #!/usr/bin/python3
 import threading
-from queue import Queue
-
 import time
+from queue import Queue
 
 from core import log
 from core.context import Context
+from core.events import Event, Handlers
 from core.evtconsumer import EvtConsumer
-from core.event import Event, Handlers
-from core.state_machine import StateMachine
+from core.water_machine import WaterMachine
+from gui.gui import TextGui
+from scale.scale import ScaleEmulator
 
 
 class Object(object):
@@ -36,9 +37,11 @@ class MainThread(threading.Thread):
 
 	def run(self):
 		context.queue = self.queue
-		loop = EvtConsumer(context)
-		loop.add_handler(Event.RFID_DETECTED, Handlers.rfid_detected)
-		self.retcode = loop.run()
+		consumer = EvtConsumer(context)
+		consumer.add_handler(Event.RFID_DETECTED, Handlers.rfid_detected)
+		context.scale = ScaleEmulator()
+		context.gui = TextGui()
+		self.retcode = consumer.run()
 		return
 
 
@@ -94,17 +97,17 @@ def main():
 	log.ok("started main thread")
 
 	send_invalid(main_queue)
-	assert (context.state_machine.state == StateMachine.State.UNINIT)
+	assert (context.state_machine.state == WaterMachine.State.UNINIT)
 
 	send_wrong_type(main_queue)
-	assert (context.state_machine.state == StateMachine.State.UNINIT)
+	assert (context.state_machine.state == WaterMachine.State.UNINIT)
 
 	send_rfid("ifoifjo23iofj", main_queue)
-	assert (context.state_machine.state == StateMachine.State.UNINIT)
+	assert (context.state_machine.state == WaterMachine.State.UNINIT)
 
 	context.state_machine.initialize()
 	send_rfid("ifoifjo23iofj", main_queue)
-	assert(timeout(0.01, context.state_machine.state, StateMachine.State.GLASS_ON))
+	assert (timeout(0.01, context.state_machine.state, WaterMachine.State.GLASS_ON))
 
 	log.ok("killing main thread")
 	send_killevt(main_queue)

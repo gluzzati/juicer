@@ -1,28 +1,27 @@
-from core import log
-
-
-class StateMachine:
+class WaterMachine:
 	class State:
 		UNINIT = "UNINIT"
 		IDLE = "IDLE"
 		GLASS_ON = "GLASS_ON"
 		POURING = "POURING"
+		REGISTERING = "REGISTERING"
 
 		ALLOWABLE = [
 			UNINIT,
 			IDLE,
 			GLASS_ON,
 			POURING,
+			REGISTERING,
 		]
 
 	@staticmethod
 	def is_valid_state(state):
 		if not isinstance(state, str):
 			return False
-		return state in StateMachine.State.ALLOWABLE
+		return state in WaterMachine.State.ALLOWABLE
 
 	def __init__(self):
-		self.state = StateMachine.State.UNINIT
+		self.state = WaterMachine.State.UNINIT
 
 	def initialize(self):
-		self.state = StateMachine.State.IDLE
+		self.state = WaterMachine.State.IDLE

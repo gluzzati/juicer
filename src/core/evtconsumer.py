@@ -1,7 +1,7 @@
 import math
 
 from core import log
-from core.event import Event, Handlers
+from core.events import Event, Handlers
 
 MAX = int(math.pow(2, 16))  # 64K
 
