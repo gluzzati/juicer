@@ -2,7 +2,7 @@
 import argparse
 
 from core.context import Context
-from core.core import Core
+from core.evtconsumer import EvtConsumer
 
 parser = argparse.ArgumentParser()
 parser.add_argument("port", help="port to bind to", type=int)
@@ -16,7 +16,7 @@ def main():
 	# - rfid thread
 
 	context = Context(args)
-	loop = Core(context)
+	loop = EvtConsumer(context)
 	return loop.run()
 
 

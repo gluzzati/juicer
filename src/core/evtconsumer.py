@@ -20,14 +20,11 @@ def get_evt(ctx):
 	return True, evt
 
 
-def unknown_event(evt):
+def unknown_event(ctx, evt):
 	log.error("unknown evt \"" + evt.type + "\"")
 
 
-class Core:
-	"""
-	waits for events, acts upon them
-	"""
+class EvtConsumer:
 	def __init__(self, context):
 		self.ctx = context
 		self.ctx.running = True
@@ -45,9 +42,9 @@ class Core:
 				continue
 
 			if evt.type not in self.handlers:
-				self.handle_unknown_evt(evt)
+				self.handle_unknown_evt(self.ctx, evt)
 				continue
 
-			self.handlers[evt.type](evt)
+			self.handlers[evt.type](self.ctx, evt)
 
 		return 0
