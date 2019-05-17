@@ -4,7 +4,7 @@ from queue import Queue
 from threading import Thread
 
 from core.context import Context
-from core.events import Event
+from core.events import Event, Handlers
 from core.evtconsumer import EvtConsumer
 from rfid.rfid import RFID
 
@@ -18,6 +18,8 @@ class CoreThread(Thread):
 		context = Context(sys.argv)
 		context.queue = self.queue
 		consumer = EvtConsumer(context)
+		consumer.add_handler(Event.RFID_DETECTED, Handlers.rfid_detected)
+		consumer.add_handler(Event.RFID_DETECTED, Handlers.rfid_removed)
 		consumer.run()
 
 

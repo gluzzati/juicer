@@ -1,9 +1,21 @@
 import RPi.GPIO as GPIO
+
 from scale.hx711.hx711 import HX711
 
 DOUT = 23
 SCK = 24
 UNIT_SCALE = 730
+
+
+class FakeScale:
+	def __init__(self):
+		pass
+
+	def reset_and_tare(self):
+		pass
+
+	def get_weight(self):
+		return 11
 
 
 class Scale:
