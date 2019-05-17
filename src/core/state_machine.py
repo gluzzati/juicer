@@ -1,3 +1,6 @@
+from core import log
+
+
 class StateMachine:
 	class State:
 		UNINIT = "UNINIT"

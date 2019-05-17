@@ -16,7 +16,7 @@ class Event:
 class Handlers:
 	@staticmethod
 	def rfid_detected(ctx, evt):
-		log.info("rfid detected: " + str(evt.rfid))
+		log.debug("rfid detected: " + str(evt.rfid))
 		ok = True
 
 		if ctx.state_machine.state != StateMachine.State.IDLE:
@@ -32,3 +32,7 @@ class Handlers:
 	def unknown_event(ctx, evt):
 		log.error("unknown evt \"" + evt.type + "\"")
 		return False, None
+
+	@staticmethod
+	def rfid_removed(ctx, evt):
+		log

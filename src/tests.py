@@ -18,7 +18,7 @@ class Object(object):
 args = Object()
 args.port = 5555
 
-log.loglevel = log.LVL_OK
+log.loglevel = log.LVL_DBG
 
 # globally expose internals
 main_queue = Queue()

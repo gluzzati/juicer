@@ -7,15 +7,6 @@ def timestamp():
 
 
 class Colors:
-	"""Colors class:
-	reset all colors with colors.reset
-	two subclasses fg for foreground and bg for background.
-	use as colors.subclass.colorname.
-	i.e. colors.fg.red or colors.bg.green
-	also, the generic bold, disable, underline, reverse, strikethrough,
-	and invisible work with the main class
-	i.e. colors.bold
-	"""
 	reset = '\033[0m'
 	bold = '\033[01m'
 	disable = '\033[02m'
@@ -52,8 +43,10 @@ class Colors:
 		lightgrey = '\033[47m'
 
 
-LVL_INFO = 1
+LVL_DBG = -1
 LVL_OK = 0
+LVL_INFO = 1
+LVL_YAY = LVL_INFO
 LVL_WARN = 2
 LVL_ERROR = 10
 
@@ -66,12 +59,20 @@ def log(lvl, arg):
 		sys.stdout.flush()
 
 
+def debug(arg):
+	log(LVL_DBG, Colors.fg.darkgrey + arg + Colors.reset)
+
+
 def ok(arg):
 	log(LVL_OK, Colors.fg.lightblue + arg + Colors.reset)
 
 
 def info(arg):
 	log(LVL_INFO, arg)
+
+
+def yay(arg):
+	log(LVL_YAY, Colors.fg.lightgreen + arg + Colors.reset)
 
 
 def warn(arg):
