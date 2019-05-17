@@ -153,3 +153,5 @@ if __name__ == "__main__":
 		relay_test()
 	if args.core or args.all:
 		core_test()
+
+	log.yay(">>>>>>>>>>> All good <<<<<<<<<<<<")
