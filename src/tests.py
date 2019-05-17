@@ -11,6 +11,7 @@ from core.events import Event, Handlers
 from core.evtconsumer import EvtConsumer
 from core.water_machine import WaterMachine
 from gui.gui import TextGui
+from rfid.rfid import RFID
 from scale.scale import ScaleEmulator, Scale
 
 
@@ -124,7 +125,11 @@ def scale_test():
 
 
 def rfid_test():
-	log.ok("testing rfid..")
+	log.ok("testing rfid [timeout in 10s!]")
+	rfid = RFID()
+	ok, tag = rfid.read_id()
+	log.yay("read tag " + tag)
+	timeout(10, ok, True)
 	pass
 
 

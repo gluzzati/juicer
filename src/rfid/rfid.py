@@ -1,2 +1,23 @@
+import RPi.GPIO as GPIO
+
+from core import log
+from rfid.mfrc522 import SimpleMFRC522
+
+
 class RFID:
-	pass
+	def __init__(self):
+		self.reader = SimpleMFRC522()
+
+	def __del__(self):
+		GPIO.cleanup()
+
+	def read_id(self):
+		try:
+			tag = self.reader.read_id()
+			res = True
+		except Exception as e:
+			log.error("error reading rfid: " + str(e))
+			tag = None
+			res = False
+
+		return res, tag
