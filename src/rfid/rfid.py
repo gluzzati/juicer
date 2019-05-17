@@ -21,3 +21,14 @@ class RFID:
 			res = False
 
 		return res, tag
+
+	def read_id_no_block(self):
+		try:
+			tag = self.read_id_no_block()
+			res = True
+		except Exception as e:
+			log.error("error reading rfid: " + str(e))
+			tag = None
+			res = False
+
+		return res, tag

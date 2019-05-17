@@ -12,7 +12,7 @@ from core.evtconsumer import EvtConsumer
 from core.water_machine import WaterMachine
 from gui.gui import TextGui
 from rfid.rfid import RFID
-from scale.scale import ScaleEmulator, Scale
+from scale.scale import FakeScale, Scale
 
 
 class Object(object):
@@ -42,7 +42,7 @@ class MainThread(threading.Thread):
 		context.queue = self.queue
 		consumer = EvtConsumer(context)
 		consumer.add_handler(Event.RFID_DETECTED, Handlers.rfid_detected)
-		context.scale = ScaleEmulator()
+		context.scale = FakeScale()
 		context.gui = TextGui()
 		self.retcode = consumer.run()
 		return

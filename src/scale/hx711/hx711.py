@@ -1,10 +1,10 @@
-#
-
 import threading
 import time
 
-import RPi.GPIO as GPIO
-
+try:
+	import RPi.GPIO as GPIO
+except ModuleNotFoundError:
+	pass
 
 class HX711:
 	def __init__(self, dout, pd_sck, gain=128):

@@ -1,5 +1,4 @@
 import RPi.GPIO as GPIO
-
 from scale.hx711.hx711 import HX711
 
 DOUT = 23
@@ -24,8 +23,3 @@ class Scale:
 
 	def get_weight(self):
 		return self.hx.get_weight(3)
-
-
-class ScaleEmulator(Scale):
-	def get_weight(self):
-		return 10
