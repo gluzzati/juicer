@@ -23,7 +23,7 @@ class Scale:
 		GPIO.cleanup()
 
 	def get_weight(self):
-		return self.hx.get_weight()
+		return self.hx.get_weight(3)
 
 
 class ScaleEmulator(Scale):
