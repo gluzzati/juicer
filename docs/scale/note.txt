@@ -1,0 +1,1 @@
+Hardware Hookup: Raspberry 3.3V (pin 1) -> VCC (It's better to use 3.3V as the RASPBERRY GPIOs are 3.3V, using 5v you can damage these pins!) Raspberry MISO (pin 21) -> DOUT Raspberry MOSI (pin 19) -> PD_SCK Raspberry GND (pin 20) -> GND
