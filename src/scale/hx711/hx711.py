@@ -29,7 +29,7 @@ class HX711:
 
 		self.OFFSET = 1
 		self.OFFSET_B = 1
-		self.lastVal = long(0)
+		self.lastVal = int(0)
 
 		self.DEBUG_PRINTING = False
 
@@ -153,7 +153,7 @@ class HX711:
 		self.lastVal = signedIntValue
 
 		# Return the sample value we've read from the HX711.
-		return long(signedIntValue)
+		return int(signedIntValue)
 
 	def read_average(self, times=3):
 		# Make sure we've been asked to take a rational amount of samples.
