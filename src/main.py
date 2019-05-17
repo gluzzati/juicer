@@ -4,8 +4,8 @@ from queue import Queue
 from threading import Thread
 
 from core.context import Context
-from core.evtconsumer import EvtConsumer
 from core.events import Event
+from core.evtconsumer import EvtConsumer
 from rfid.rfid import RFID
 
 
@@ -63,6 +63,7 @@ def main():
 	threadpool = []
 	threadpool.append(RfidThread(main_queue))
 
+	core_th.start()
 	for thread in threadpool:
 		thread.start()
 
