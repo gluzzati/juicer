@@ -2,7 +2,7 @@
 import argparse
 
 from core.context import Context
-from core.core import Mainloop
+from core.core import Core
 
 parser = argparse.ArgumentParser()
 parser.add_argument("port", help="port to bind to", type=int)
@@ -11,7 +11,7 @@ args = parser.parse_args()
 
 def main():
     context = Context(args)
-    loop = Mainloop(context)
+    loop = Core(context)
     return loop.run()
 
 

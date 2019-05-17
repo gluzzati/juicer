@@ -31,9 +31,9 @@ def handle_msg(ctx, msg):
 
     if not isinstance(msg, Message):
         log.error("invalid message")
-        result = Result()
-        result.ok = False
-        return result
+        res = Result()
+        res.ok = False
+        return res
 
     handler = get_handler(msg.type)
     try:
@@ -47,7 +47,7 @@ def handle_msg(ctx, msg):
     return res
 
 
-class Mainloop:
+class Core:
     def __init__(self, context):
         self.ctx = context
         self.ctx.running = True

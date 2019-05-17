@@ -3,7 +3,7 @@ import socket
 import threading
 
 from core.context import Context
-from core.core import Mainloop
+from core.core import Core
 from core.message import KILLMSG
 from core import log
 from var import test_fixtures
@@ -22,7 +22,7 @@ log.loglevel = log.LVL_OK
 class MainThread(threading.Thread):
     def run(self):
         context = Context(args)
-        loop = Mainloop(context)
+        loop = Core(context)
         self.retcode = loop.run()
         return
 
