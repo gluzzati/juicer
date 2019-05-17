@@ -5,6 +5,7 @@ import threading
 from core.context import Context
 from core.core import Mainloop
 from core.message import KILLMSG
+from core import log
 from var import test_fixtures
 
 
@@ -15,12 +16,15 @@ class Object(object):
 args = Object()
 args.port = 5555
 
+log.loglevel = log.LVL_OK
+
 
 class MainThread(threading.Thread):
     def run(self):
         context = Context(args)
         loop = Mainloop(context)
-        return loop.run()
+        self.retcode = loop.run()
+        return
 
 
 def send_msg(msg):
@@ -31,15 +35,18 @@ def send_msg(msg):
 def main():
     main_t = MainThread()
     main_t.start()
+    log.ok("started main thread")
 
     send_msg(test_fixtures.invalid_json)
     send_msg(test_fixtures.rfid_json)
     send_msg(test_fixtures.weight_json)
     send_msg(test_fixtures.valid_json)
 
+    log.ok("killing main thread")
     send_msg(KILLMSG)
 
     main_t.join()
+    assert(main_t.retcode == 0)
 
 
 if __name__ == "__main__":
