@@ -4,11 +4,10 @@ from queue import Queue
 
 import time
 
-from core import handlers
 from core import log
 from core.context import Context
 from core.evtconsumer import EvtConsumer
-from core.event import Event
+from core.event import Event, Handlers
 from core.state_machine import StateMachine
 
 
@@ -38,7 +37,7 @@ class MainThread(threading.Thread):
 	def run(self):
 		context.queue = self.queue
 		loop = EvtConsumer(context)
-		loop.add_handler(Event.RFID_DETECTED, handlers.rfid_detected)
+		loop.add_handler(Event.RFID_DETECTED, Handlers.rfid_detected)
 		self.retcode = loop.run()
 		return
 

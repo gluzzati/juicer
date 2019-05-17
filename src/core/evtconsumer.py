@@ -1,7 +1,7 @@
 import math
 
 from core import log
-from core.event import Event
+from core.event import Event, Handlers
 
 MAX = int(math.pow(2, 16))  # 64K
 
@@ -20,16 +20,12 @@ def get_evt(ctx):
 	return True, evt
 
 
-def unknown_event(ctx, evt):
-	log.error("unknown evt \"" + evt.type + "\"")
-
-
 class EvtConsumer:
 	def __init__(self, context):
 		self.ctx = context
 		self.ctx.running = True
 		self.handlers = dict()
-		self.handle_unknown_evt = unknown_event
+		self.handle_unknown_evt = Handlers.unknown_event
 
 	def add_handler(self, evt_type, handler):
 		self.handlers[evt_type] = handler
@@ -42,9 +38,9 @@ class EvtConsumer:
 				continue
 
 			if evt.type not in self.handlers:
-				self.handle_unknown_evt(self.ctx, evt)
+				ok, res = self.handle_unknown_evt(self.ctx, evt)
 				continue
 
-			self.handlers[evt.type](self.ctx, evt)
+			ok, res = self.handlers[evt.type](self.ctx, evt)
 
 		return 0
