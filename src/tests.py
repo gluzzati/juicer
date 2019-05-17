@@ -118,8 +118,9 @@ def core_test():
 
 def scale_test():
 	log.ok("testing scale..")
+	scale = Scale()
 	for i in range(10):
-		w = Scale().get_weight()
+		w = scale.get_weight()
 		log.ok("weight = " + str(w))
 		assert w is not None
 
