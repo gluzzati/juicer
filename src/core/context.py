@@ -2,7 +2,7 @@ from queue import Queue
 
 from core import log
 from core.database import Database
-from gui.gui import TextGui
+from gui.gui import GuiProxy
 from scale.scale import Scale
 
 
@@ -32,10 +32,10 @@ class Context:
 	def __init__(self):
 		self.valid = True
 		self.state = Context.State.UNINIT
+		self.gui = GuiProxy()
 		self.database = Database()
 		self.scale = Scale()
 		self.queue = Queue()
-		self.gui = TextGui()
 		self.initialize()
 
 		self.state_callbacks = {

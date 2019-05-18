@@ -11,19 +11,16 @@ from rfid.rfid import RfidThread
 def main():
 	log.loglevel = log.LVL_DBG
 
-	# start
-	# - core thread
-	# - gui thread
-	# - rfid thread
-
 	context = Context()
 
 	core_th = ReactorThread(context)
 	rfid_th = RfidThread(context.queue)
+	# gui_th = GuiThread(context.queue)
 
 	try:
 		core_th.start()
 		rfid_th.start()
+		# gui_th.start()
 
 		rfid_th.join()
 		core_th.join()
@@ -33,7 +30,9 @@ def main():
 		context.queue.put(evt)
 
 		rfid_th.running = False
+	# gui_th.running = False
 
+	# gui_th.join()
 	core_th.join()
 	rfid_th.join()
 	GPIO.cleanup()
