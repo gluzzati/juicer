@@ -29,6 +29,7 @@ class Reactor:
 		self.add_handler(Event.RFID_DETECTED, rfid_detected_handler)
 		self.add_handler(Event.RFID_REMOVED, rfid_removed_handler)
 		self.add_handler(Event.REGISTRATION_REQUESTED, registration_requested_handler)
+		self.add_handler(Event.AUTO_WATEROFF, auto_wateroff_handler)
 
 	def add_handler(self, evt_type, handler):
 		self.handlers[evt_type] = handler

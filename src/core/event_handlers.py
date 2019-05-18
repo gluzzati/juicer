@@ -17,11 +17,12 @@ def rfid_detected_handler(ctx, evt):
 	ctx.set_state(Context.State.GLASS_ON)
 	known, user = ctx.database.lookup_rfid(evt.rfid)
 	if known:
-		current_water = ctx.scale.get_weight() - user.glass_weight
-		missing_water = user.glass_capacity - current_water
+		ctx.user = user
+		current_water = ctx.scale.get_weight() - user.glass.weight
+		missing_water = user.glass.capacity - current_water
 		ctx.gui.update(
 			"hello, {}! your glass holds {}ml, do you want to fill up with {}ml?".format(
-				user.name, user.glass_capacity, missing_water))
+				user.name, user.glass.capacity, missing_water))
 		ctx.start_pouring()
 	else:
 		ctx.gui.update("Hi stranger! want to register?")
@@ -31,8 +32,9 @@ def rfid_detected_handler(ctx, evt):
 
 def rfid_removed_handler(ctx, evt):
 	log.debug("rfid removed handler")
-	if ctx.get_state() is Context.State.GLASS_ON:
-		ctx.stop_pouring()
+	if ctx.get_state() in (Context.State.GLASS_ON, Context.State.POURING):
+		if ctx.get_state() == Context.State.POURING:
+			ctx.stop_pouring()
 		ctx.set_state(Context.State.IDLE)
 	else:
 		log.debug("removed rfid, but there was no glass, mumble mumble...")
@@ -40,21 +42,11 @@ def rfid_removed_handler(ctx, evt):
 	return True, None
 
 
-def fill_request_handler(ctx, evt):
-	if ctx.get_state() == Context.State.GLASS_ON:
-		ctx.set_state(Context.State.POURING)
-		ctx.start_pouring()
-	else:
-		log.debug("can't fill, there's no glass")
-	return True, None
-
-
-def stop_request_handler(ctx, evt):
+def auto_wateroff_handler(ctx, evt):
 	if ctx.get_state() == Context.State.POURING:
-		ctx.stop_pouring()
 		ctx.set_state(Context.State.GLASS_ON)
 	else:
-		log.debug("nothing to stop, not pouring")
+		log.debug("nothing to stop, not pouring, mumble mumble")
 	return True, None
 
 

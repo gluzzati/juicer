@@ -8,11 +8,13 @@ from rfid.mfrc522 import SimpleMFRC522
 class RFID:
 	def __init__(self):
 		self.reader = SimpleMFRC522()
+		self.history = 0
 
 	def read_id(self):
 		try:
-			tag = self.reader.read_id(0.3)
+			tag = self.reader.read_id(0.005)
 			res = True
+
 		except Exception as e:
 			log.error("error reading rfid: " + str(e))
 			tag = None

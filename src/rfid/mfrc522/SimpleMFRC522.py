@@ -22,8 +22,10 @@ class SimpleMFRC522:
 	def read_id(self, timeout=0):
 		start = time.time()
 		id = self.read_id_no_block()
-		while not id and not (0 < timeout < time.time() - start):
+		now = start
+		while not id and not (0 < timeout < now - start):
 			id = self.read_id_no_block()
+			now = time.time()
 		return id
 
 	def read_id_no_block(self):

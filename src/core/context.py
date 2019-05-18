@@ -1,10 +1,48 @@
+import time
 from queue import Queue
+from threading import Thread
 
 from core import log
 from core.database import Database
+from core.events import Event
 from gui.gui import GuiProxy
 from relay.relay import Relay
 from scale.scale import Scale
+
+SAFETY_TIMEOUT = 5
+GUARD = 0.9
+
+
+class Safety(Thread):
+	def __init__(self, relay, scale, glass, queue):
+		self.relay = relay
+		self.scale = scale
+		self.glass = glass
+		self.queue = queue
+		super().__init__()
+
+	def glass_full(self):
+		return self.scale.get_weight() > (GUARD * (self.glass.weight + self.glass.capacity))
+
+	def run(self):
+		start = time.time()
+		elapsed = time.time() - start
+		while elapsed < SAFETY_TIMEOUT and self.relay.pouring and not self.glass_full():
+			time.sleep(0.1)
+			elapsed = time.time() - start
+
+		if self.relay.pouring:
+			self.relay.water_off()
+			evt = Event(Event.AUTO_WATEROFF)
+			evt.cause = None
+			log.warn("auto off")
+			if elapsed > SAFETY_TIMEOUT:
+				log.warn("timed out")
+				evt.cause = "TIMEOUT"
+			if self.glass_full():
+				log.warn("glass full")
+				evt.cause = "GLASS_FULL"
+			self.queue.put(evt)
 
 
 class Context:
@@ -35,14 +73,17 @@ class Context:
 		self.state = Context.State.UNINIT
 		self.gui = GuiProxy()
 		self.database = Database()
+		self.user = None
+
 		# todo delete
 		from core.user import User
 		giulio = User()
 		giulio.name = "Giulio"
 		giulio.tag = 797313096147
-		giulio.glass_capacity = 250
-		giulio.glass_weight = 280
+		giulio.glass.capacity = 250
+		giulio.glass.weight = 280
 		self.database.add(giulio)
+
 		self.scale = Scale()
 		self.queue = Queue()
 		self.relay = Relay()
@@ -67,8 +108,9 @@ class Context:
 
 	def set_state(self, state):
 		if isinstance(state, type(Context.State.IDLE)):
-			self.state = state
-			self.state_callbacks[self.state]()
+			if self.state != state:
+				self.state = state
+				self.state_callbacks[self.state]()
 		else:
 			log.debug("trying to set state using a wrong type, aborting")
 
@@ -76,12 +118,11 @@ class Context:
 
 	def start_pouring(self):
 		log.ok("issuing startpour")
-		self.relay.water_on()
+		self.set_state(Context.State.POURING)
 
 	def stop_pouring(self):
 		log.ok("issuing stoppouring")
-		# todo readd
-		self.relay.water_off()
+		self.set_state(Context.State.IDLE)
 
 	"""
 	state change callbacks
@@ -89,6 +130,7 @@ class Context:
 
 	def on_idle(self):
 		log.debug("on idle")
+		self.user = None
 		pass
 
 	def on_glass_on(self):
@@ -97,4 +139,7 @@ class Context:
 
 	def on_pouring(self):
 		log.debug("on pouring")
+		timer = Safety(self.relay, self.scale, self.user.glass, self.queue)
+		self.relay.water_on()
+		timer.start()
 		pass

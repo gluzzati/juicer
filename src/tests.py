@@ -87,8 +87,8 @@ def send_register(queue):
 	giulio = User()
 	giulio.name = "Giulio"
 	giulio.tag = 797313096147
-	giulio.glass_capacity = 250
-	giulio.glass_weight = 280
+	giulio.glass.capacity = 250
+	giulio.glass.weight = 280
 	evt.user = giulio
 	qpush(evt)
 

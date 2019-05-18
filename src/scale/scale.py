@@ -4,8 +4,8 @@ from core import log
 from core.events import Event
 from scale.hx711.hx711 import HX711
 
-DOUT = 23
-SCK = 24
+DOUT = 20
+SCK = 21
 UNIT_SCALE = 730
 
 

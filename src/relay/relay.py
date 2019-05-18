@@ -1,25 +1,6 @@
-import time
-from threading import Thread
-
 import RPi.GPIO as GPIO
 
 from core import log
-
-SAFETY_TIMEOUT = 30
-
-
-class SafetyTimer(Thread):
-	def __init__(self, relay):
-		self.relay = relay
-		super().__init__()
-
-	def run(self):
-		start = time.time()
-		while time.time() - start < SAFETY_TIMEOUT and self.relay.pouring:
-			time.sleep(1)
-		if self.relay.pouring:
-			log.warn("safety stop triggered!")
-			self.relay.water_off()
 
 
 class Relay:
@@ -44,8 +25,6 @@ class Relay:
 		if self.pourer_pin:
 			self.pouring = True
 			GPIO.output(self.pourer_pin, GPIO.LOW)
-			timer = SafetyTimer(self)
-			timer.start()
 
 	def water_off(self):
 		if self.pourer_pin:
