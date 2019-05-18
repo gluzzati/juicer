@@ -1,3 +1,5 @@
+from threading import Thread
+
 import RPi.GPIO as GPIO
 
 from scale.hx711.hx711 import HX711
@@ -35,3 +37,18 @@ class Scale:
 
 	def get_weight(self):
 		return self.hx.get_weight(3)
+
+
+class ScaleThread(Thread):
+	def __init__(self, mainqueue):
+		self.mainqueue = mainqueue
+		self.running = False
+		super().__init__()
+
+	def stop(self):
+		self.running = False
+
+	def run(self):
+		self.running = True
+		while self.running:
+			pass

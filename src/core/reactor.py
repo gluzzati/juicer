@@ -1,3 +1,5 @@
+from threading import Thread
+
 import math
 
 from core import log
@@ -44,3 +46,15 @@ class Reactor:
 			ok, res = self.handlers[evt.type](self.ctx, evt)
 
 		return 0
+
+
+class ReactorThread(Thread):
+	def __init__(self, context):
+		self.ctx = context
+		super().__init__()
+
+	def run(self):
+		consumer = Reactor(self.ctx)
+		consumer.add_handler(Event.RFID_DETECTED, Handlers.rfid_detected)
+		consumer.add_handler(Event.RFID_REMOVED, Handlers.rfid_removed)
+		consumer.run()
