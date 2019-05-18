@@ -7,20 +7,20 @@
 # Timeline
 ##  phase 1 - ends 19/5
 
-* buy 12v supply (and 5v?)
-* define MQ framework
-* define state, headers / python defs
+* ~~buy 12v supply (and 5v?)~~
+* ~~define MQ framework~~ 
+* ~~define state, headers / python defs~~
 * GUI framweork
     * stub dashboard 
     * two panes / debug -> whole state log
-* daemons: weight, rfid
+* ~~daemons: weight, rfid~~
     * define tests
     * code mockups 
 * buy darlington for relayboard
  
 
-* solder rfid board
-* rfidboard helloworld
+* ~~solder rfid board~~
+* ~~rfidboard helloworld~~
 
 ## phase 2 - ends 22/5
 
