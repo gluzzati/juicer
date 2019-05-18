@@ -3,6 +3,7 @@ from queue import Queue
 from core import log
 from core.database import Database
 from gui.gui import GuiProxy
+from relay.relay import Relay
 from scale.scale import Scale
 
 
@@ -34,8 +35,18 @@ class Context:
 		self.state = Context.State.UNINIT
 		self.gui = GuiProxy()
 		self.database = Database()
+		# todo delete
+		from core.user import User
+		giulio = User()
+		giulio.name = "Giulio"
+		giulio.tag = 797313096147
+		giulio.glass_capacity = 250
+		giulio.glass_weight = 280
+		self.database.add(giulio)
 		self.scale = Scale()
 		self.queue = Queue()
+		self.relay = Relay()
+		self.relay.set_pourer(2)
 		self.initialize()
 
 		self.state_callbacks = {
@@ -65,9 +76,12 @@ class Context:
 
 	def start_pouring(self):
 		log.ok("issuing startpour")
+		self.relay.water_on()
 
 	def stop_pouring(self):
 		log.ok("issuing stoppouring")
+		# todo readd
+		self.relay.water_off()
 
 	"""
 	state change callbacks

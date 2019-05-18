@@ -37,7 +37,7 @@ class Reactor:
 		while self.ctx.running:
 			ok, evt = get_evt(self.ctx)
 
-			if not ok:
+			if not ok or evt.too_old():
 				continue
 
 			if evt.type not in self.handlers:

@@ -84,7 +84,6 @@ def send_wrong_type(queue):
 
 def send_register(queue):
 	evt = Event(Event.REGISTRATION_REQUESTED)
-	# delete this
 	giulio = User()
 	giulio.name = "Giulio"
 	giulio.tag = 797313096147

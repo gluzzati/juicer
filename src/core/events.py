@@ -1,5 +1,8 @@
 import time
 
+from core import log
+
+OBLIVION = 2  # seconds
 
 class Event:
 	SIGINT = "SIGINT"
@@ -14,3 +17,9 @@ class Event:
 		self.timestamp = time.time()  # slow?
 		self.data = None
 		self.type = type
+
+	def too_old(self):
+		is_old = time.time() - self.timestamp > OBLIVION
+		if is_old:
+			log.info("discarding old event " + self.type)
+		return is_old
