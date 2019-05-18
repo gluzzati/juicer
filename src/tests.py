@@ -8,7 +8,7 @@ from queue import Queue
 from core import log
 from core.context import Context
 from core.events import Event, Handlers
-from core.evtconsumer import EvtConsumer
+from core.reactor import Reactor
 from core.water_machine import WaterMachine
 from gui.gui import TextGui
 from rfid.rfid import RFID
@@ -40,7 +40,7 @@ class MainThread(threading.Thread):
 
 	def run(self):
 		context.queue = self.queue
-		consumer = EvtConsumer(context)
+		consumer = Reactor(context)
 		consumer.add_handler(Event.RFID_DETECTED, Handlers.rfid_detected)
 		context.scale = FakeScale()
 		context.gui = TextGui()

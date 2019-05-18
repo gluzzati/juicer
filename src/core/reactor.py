@@ -20,7 +20,7 @@ def get_evt(ctx):
 	return True, evt
 
 
-class EvtConsumer:
+class Reactor:
 	def __init__(self, context):
 		self.ctx = context
 		self.ctx.running = True

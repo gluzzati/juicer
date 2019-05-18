@@ -6,7 +6,7 @@ from threading import Thread
 from core import log
 from core.context import Context
 from core.events import Event, Handlers
-from core.evtconsumer import EvtConsumer
+from core.reactor import Reactor
 from rfid.rfid import RFID
 
 
@@ -18,7 +18,7 @@ class CoreThread(Thread):
 	def run(self):
 		context = Context(sys.argv)
 		context.queue = self.queue
-		consumer = EvtConsumer(context)
+		consumer = Reactor(context)
 		consumer.add_handler(Event.RFID_DETECTED, Handlers.rfid_detected)
 		consumer.add_handler(Event.RFID_REMOVED, Handlers.rfid_removed)
 		consumer.run()
@@ -76,14 +76,23 @@ def main():
 	threadpool = []
 	threadpool.append(RfidThread(main_queue))
 
-	core_th.start()
-	for thread in threadpool:
-		thread.start()
+	try:
+		core_th.start()
+		for thread in threadpool:
+			thread.start()
 
-	core_th.join()
+		core_th.join()
+
+	except KeyboardInterrupt:
+		evt = Event()
+		evt.type = Event.SIGINT
+		main_queue.put(evt)
+
+		for thread in threadpool:
+			thread.running = False
 
 	for thread in threadpool:
-		thread.running = False
+		thread.join()
 
 if __name__ == "__main__":
 	main()
