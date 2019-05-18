@@ -5,9 +5,9 @@ import threading
 import time
 from queue import Queue
 
-from core import log
 from core.context import Context
-from core.events import Event, Handlers
+from core.events import Event
+from core.handlers import *
 from core.reactor import Reactor
 from core.water_machine import WaterMachine
 from gui.gui import TextGui
@@ -41,7 +41,7 @@ class MainThread(threading.Thread):
 	def run(self):
 		context.queue = self.queue
 		consumer = Reactor(context)
-		consumer.add_handler(Event.RFID_DETECTED, Handlers.rfid_detected)
+		consumer.add_handler(Event.RFID_DETECTED, rfid_detected_handler)
 		context.scale = FakeScale()
 		context.gui = TextGui()
 		self.retcode = consumer.run()
@@ -116,18 +116,24 @@ def core_test():
 def scale_test():
 	log.ok("testing scale..")
 	scale = Scale()
-	for i in range(10):
+	for i in range(3):
 		w = scale.get_weight()
 		log.ok("weight = " + str(w))
 		assert w is not None
 
 
 def rfid_test():
-	log.ok("testing rfid [timeout in 10s!]")
+	bluefob = 797313096147
+	log.ok("testing rfid - approach blue fob (tag n. {}), press any key when ready".format(bluefob))
+	input()
 	rfid = RFID()
 	ok, tag = rfid.read_id()
-	log.yay("read tag " + str(tag))
-	timeout(10, ok, True)
+	assert ok
+	assert tag is not None
+	if tag != bluefob:
+		log.warn("read tag " + str(tag))
+	else:
+		log.yay("blue fob detected")
 	pass
 
 

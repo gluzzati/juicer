@@ -2,6 +2,7 @@ from threading import Thread
 
 import RPi.GPIO as GPIO
 
+from core.events import Event
 from scale.hx711.hx711 import HX711
 
 DOUT = 23
@@ -37,6 +38,13 @@ class Scale:
 
 	def get_weight(self):
 		return self.hx.get_weight(3)
+
+
+def request_weight_measure(scale, queue):
+	weight = scale.get_weight()
+	evt = Event(Event.WEIGHT_MEASURE)
+	evt.weight = weight
+	queue.put(evt)
 
 
 class ScaleThread(Thread):

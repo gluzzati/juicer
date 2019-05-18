@@ -2,8 +2,8 @@ from threading import Thread
 
 import math
 
-from core import log
-from core.events import Event, Handlers
+from core.events import Event
+from core.handlers import *
 
 MAX = int(math.pow(2, 16))  # 64K
 
@@ -27,7 +27,7 @@ class Reactor:
 		self.ctx = context
 		self.ctx.running = True
 		self.handlers = dict()
-		self.handle_unknown_evt = Handlers.unknown_event
+		self.handle_unknown_evt = unknown_event_handler
 
 	def add_handler(self, evt_type, handler):
 		self.handlers[evt_type] = handler
@@ -55,6 +55,6 @@ class ReactorThread(Thread):
 
 	def run(self):
 		consumer = Reactor(self.ctx)
-		consumer.add_handler(Event.RFID_DETECTED, Handlers.rfid_detected)
-		consumer.add_handler(Event.RFID_REMOVED, Handlers.rfid_removed)
+		consumer.add_handler(Event.RFID_DETECTED, rfid_detected_handler)
+		consumer.add_handler(Event.RFID_REMOVED, rfid_removed_handler)
 		consumer.run()
