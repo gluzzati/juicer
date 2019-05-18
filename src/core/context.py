@@ -24,11 +24,12 @@ class Context:
 		return self.state_machine.state
 
 	def set_state(self, state):
-		if not isinstance(state, type(WaterMachine.State.IDLE)):
-			log.debug("trying to set state using a wrong type, aborting")
-			pass
-		else:
+		if isinstance(state, type(WaterMachine.State.IDLE)):
 			self.state_machine.state = state
+		else:
+			log.debug("trying to set state using a wrong type, aborting")
+
+		pass
 
 	def start_pouring(self):
 		log.ok("issuing startpour")

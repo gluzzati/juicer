@@ -7,6 +7,7 @@ from core.context import Context
 from core.events import Event
 from core.reactor import ReactorThread
 from rfid.rfid import RfidThread
+from scale.scale import Scale
 
 
 def main():
@@ -18,6 +19,7 @@ def main():
 	# - rfid thread
 
 	context = Context(sys.argv)
+	context.set_scale(Scale())
 	context.queue = Queue()
 
 	core_th = ReactorThread(context)
