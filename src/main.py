@@ -43,22 +43,19 @@ class RfidThread(Thread):
 			detected = tag is not None
 
 			if detected and (not self.tag_present or tag != self.current_tag):
-				evt = Event()
-				evt.type = Event.RFID_DETECTED
+				evt = Event(Event.RFID_DETECTED)
 				evt.rfid = tag
 				self.current_tag = tag
 				self.tag_present = True
 				self.dispatch(evt)
 			elif detected and tag != self.current_tag:
-				evt = Event()
-				evt.type = Event.RFID_DETECTED
+				evt = Event(Event.RFID_DETECTED)
 				evt.rfid = tag
 				self.current_tag = tag
 				self.dispatch(evt)
 
 			elif not detected and self.tag_present:
-				evt = Event()
-				evt.type = Event.RFID_REMOVED
+				evt = Event(Event.RFID_REMOVED)
 				self.current_tag = None
 				self.tag_present = False
 				self.dispatch(evt)
@@ -84,8 +81,7 @@ def main():
 		core_th.join()
 
 	except KeyboardInterrupt:
-		evt = Event()
-		evt.type = Event.SIGINT
+		evt = Event(Event.SIGINT)
 		main_queue.put(evt)
 
 		for thread in threadpool:

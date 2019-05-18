@@ -54,27 +54,24 @@ def qpush(evt):
 
 
 def send_json_msg(msg, queue):
-	evt = Event()
+	evt = Event(Event.JSON)
 	evt.data = str.encode(msg)
-	evt.type = Event.JSON
 	qpush(evt)
 
 
 def send_rfid(rfid, queue):
-	evt = Event()
-	evt.type = Event.RFID_DETECTED
+	evt = Event(Event.RFID_DETECTED)
 	evt.rfid = rfid
 	qpush(evt)
 
 
 def send_killevt(queue):
-	evt = Event()
-	evt.type = Event.SIGINT
+	evt = Event(Event.SIGINT)
 	qpush(evt)
 
 
 def send_invalid(queue):
-	evt = Event()
+	evt = Event(Event.INVALID)
 	evt.type = "what is this?"
 	qpush(evt)
 

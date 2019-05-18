@@ -9,9 +9,9 @@ class Event:
 	RFID_REMOVED = "RFID_REMOVED"
 	INVALID = "INVALID"
 
-	def __init__(self):
+	def __init__(self, type):
 		self.data = None
-		self.type = Event.INVALID
+		self.type = type
 
 
 class Handlers:
