@@ -164,7 +164,6 @@ class MFRC522:
 
 	def Close_MFRC522(self):
 		self.spi.close()
-		GPIO.cleanup()
 
 	def SetBitMask(self, reg, mask):
 		tmp = self.Read_MFRC522(reg)

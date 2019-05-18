@@ -1,7 +1,6 @@
 from threading import Thread
 
-import RPi.GPIO as GPIO
-
+from core import log
 from core.events import Event
 from scale.hx711.hx711 import HX711
 
@@ -31,10 +30,9 @@ class Scale:
 
 	def reset_and_tare(self):
 		self.hx.reset()
+		log.debug("taring scale... ")
 		self.hx.tare()
-
-	def __del__(self):
-		GPIO.cleanup()
+		log.debug("tare complete, scale ready")
 
 	def get_weight(self):
 		return self.hx.get_weight(3)

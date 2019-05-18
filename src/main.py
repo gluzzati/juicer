@@ -1,13 +1,11 @@
 #!/usr/bin/python3
-import sys
-from queue import Queue
+from RPi import GPIO
 
 from core import log
 from core.context import Context
 from core.events import Event
 from core.reactor import ReactorThread
 from rfid.rfid import RfidThread
-from scale.scale import Scale
 
 
 def main():
@@ -18,9 +16,7 @@ def main():
 	# - gui thread
 	# - rfid thread
 
-	context = Context(sys.argv)
-	context.set_scale(Scale())
-	context.queue = Queue()
+	context = Context()
 
 	core_th = ReactorThread(context)
 	rfid_th = RfidThread(context.queue)
@@ -40,6 +36,7 @@ def main():
 
 	core_th.join()
 	rfid_th.join()
+	GPIO.cleanup()
 
 
 if __name__ == "__main__":

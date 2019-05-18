@@ -1,11 +1,7 @@
 from threading import Thread
 
-import math
-
+from core.event_handlers import *
 from core.events import Event
-from core.handlers import *
-
-MAX = int(math.pow(2, 16))  # 64K
 
 
 def get_evt(ctx):

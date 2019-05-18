@@ -5,11 +5,9 @@ import threading
 import time
 from queue import Queue
 
-from core.context import Context
+from core.event_handlers import *
 from core.events import Event
-from core.handlers import *
 from core.reactor import Reactor
-from core.water_machine import WaterMachine
 from gui.gui import TextGui
 from rfid.rfid import RFID
 from scale.scale import FakeScale, Scale
@@ -19,14 +17,11 @@ class Object(object):
 	pass
 
 
-args = Object()
-args.port = 5555
-
 log.loglevel = log.LVL_DBG
 
 # globally expose internals
 main_queue = Queue()
-context = Context(args)
+context = Context()
 
 
 class MainThread(threading.Thread):
@@ -96,17 +91,17 @@ def core_test():
 	main_t.start()
 
 	send_invalid(main_queue)
-	assert (context.state_machine.state == WaterMachine.State.UNINIT)
+	assert (context.state == Context.State.UNINIT)
 
 	send_wrong_type(main_queue)
-	assert (context.state_machine.state == WaterMachine.State.UNINIT)
+	assert (context.state == Context.State.UNINIT)
 
 	send_rfid("ifoifjo23iofj", main_queue)
-	assert (context.state_machine.state == WaterMachine.State.UNINIT)
+	assert (context.state == Context.State.UNINIT)
 
-	context.state_machine.initialize()
+	context.initialize()
 	send_rfid("ifoifjo23iofj", main_queue)
-	assert (timeout(0.01, context.state_machine.state, WaterMachine.State.GLASS_ON))
+	assert (timeout(0.01, context.state, Context.State.GLASS_ON))
 
 	send_killevt(main_queue)
 	main_t.join()
