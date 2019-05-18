@@ -9,7 +9,7 @@ from core.event_handlers import *
 from core.events import Event
 from core.reactor import Reactor
 from core.user import User
-from gui.gui import TextGuiProxy
+from gui.gui import GuiProxy
 from rfid.rfid import RFID
 from scale.scale import FakeScale, Scale
 
@@ -39,7 +39,7 @@ class MainThread(threading.Thread):
 		consumer = Reactor(context)
 		consumer.add_handler(Event.RFID_DETECTED, rfid_detected_handler)
 		context.scale = FakeScale()
-		context.gui = TextGuiProxy()
+		context.gui = GuiProxy()
 		self.retcode = consumer.run()
 		return
 
