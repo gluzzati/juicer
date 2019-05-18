@@ -6,6 +6,6 @@ class Gui:
 		pass
 
 
-class TextGui:
+class TextGui(Gui):
 	def update(self, arg):
 		log.yay(arg)

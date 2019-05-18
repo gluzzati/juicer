@@ -91,13 +91,13 @@ def core_test():
 	main_t.start()
 
 	send_invalid(main_queue)
-	assert (context.state == Context.State.UNINIT)
+	assert (context.state == Context.State.IDLE)
 
 	send_wrong_type(main_queue)
-	assert (context.state == Context.State.UNINIT)
+	assert (context.state == Context.State.IDLE)
 
 	send_rfid("ifoifjo23iofj", main_queue)
-	assert (context.state == Context.State.UNINIT)
+	assert (context.state == Context.State.GLASS_ON)
 
 	context.initialize()
 	send_rfid("ifoifjo23iofj", main_queue)

@@ -11,7 +11,7 @@ class RFID:
 
 	def read_id(self):
 		try:
-			tag = self.reader.read_id(0.1)
+			tag = self.reader.read_id(0.3)
 			res = True
 		except Exception as e:
 			log.error("error reading rfid: " + str(e))

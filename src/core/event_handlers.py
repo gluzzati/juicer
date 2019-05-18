@@ -20,7 +20,8 @@ def rfid_detected_handler(ctx, evt):
 		current_water = ctx.scale.get_weight() - user.glass_weight
 		missing_water = user.glass_capacity - current_water
 		ctx.gui.update(
-			"hello, " + user.name + "! your glass holds " + user.glass_capacity + ", do you want to fill up (" + missing_water + "?")
+			"hello, {}! your glass holds {}, do you want to fill up with {}?".format(
+				user.name, user.glass_capacity, missing_water))
 	else:
 		ctx.gui.update("Hi stranger! want to register?")
 

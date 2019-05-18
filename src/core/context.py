@@ -2,6 +2,7 @@ from queue import Queue
 
 from core import log
 from core.database import Database
+from gui.gui import TextGui
 from scale.scale import Scale
 
 
@@ -36,7 +37,8 @@ class Context:
 		self.database = Database()
 		self.scale = Scale()
 		self.queue = Queue()
-		self.gui = None
+		self.gui = TextGui()
+		self.initialize()
 
 		self.state_callbacks = {
 			Context.State.IDLE: self.on_idle,
