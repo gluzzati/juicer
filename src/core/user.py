@@ -7,3 +7,6 @@ class User:
 
 	def is_valid(self):
 		return True
+
+	def to_string(self):
+		return "{}@{} - {}g/{}ml".format(self.name, self.tag, self.glass_weight, self.glass_capacity)

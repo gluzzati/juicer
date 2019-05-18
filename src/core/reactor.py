@@ -25,6 +25,11 @@ class Reactor:
 		self.handlers = dict()
 		self.handle_unknown_evt = unknown_event_handler
 
+		# handlers
+		self.add_handler(Event.RFID_DETECTED, rfid_detected_handler)
+		self.add_handler(Event.RFID_REMOVED, rfid_removed_handler)
+		self.add_handler(Event.REGISTRATION_REQUESTED, registration_requested_handler)
+
 	def add_handler(self, evt_type, handler):
 		self.handlers[evt_type] = handler
 
@@ -51,6 +56,4 @@ class ReactorThread(Thread):
 
 	def run(self):
 		consumer = Reactor(self.ctx)
-		consumer.add_handler(Event.RFID_DETECTED, rfid_detected_handler)
-		consumer.add_handler(Event.RFID_REMOVED, rfid_removed_handler)
 		consumer.run()

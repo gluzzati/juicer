@@ -8,4 +8,4 @@ class Gui:
 
 class TextGui(Gui):
 	def update(self, arg):
-		log.yay(arg)
+		log.yay("[GUI]:" + arg)

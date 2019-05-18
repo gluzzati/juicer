@@ -20,7 +20,7 @@ def rfid_detected_handler(ctx, evt):
 		current_water = ctx.scale.get_weight() - user.glass_weight
 		missing_water = user.glass_capacity - current_water
 		ctx.gui.update(
-			"hello, {}! your glass holds {}, do you want to fill up with {}?".format(
+			"hello, {}! your glass holds {}ml, do you want to fill up with {}ml?".format(
 				user.name, user.glass_capacity, missing_water))
 	else:
 		ctx.gui.update("Hi stranger! want to register?")
@@ -54,4 +54,13 @@ def stop_request_handler(ctx, evt):
 		ctx.set_state(Context.State.GLASS_ON)
 	else:
 		log.debug("nothing to stop, not pouring")
+	return True, None
+
+
+def registration_requested_handler(ctx, evt):
+	user = evt.user
+	exists, _ = ctx.database.lookup_rfid(user.tag)
+	if exists:
+		log.warn("user \"{}\" already exists in db - updating records".format(user.name))
+	ctx.database.add(user)
 	return True, None

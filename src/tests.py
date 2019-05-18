@@ -8,6 +8,7 @@ from queue import Queue
 from core.event_handlers import *
 from core.events import Event
 from core.reactor import Reactor
+from core.user import User
 from gui.gui import TextGui
 from rfid.rfid import RFID
 from scale.scale import FakeScale, Scale
@@ -65,6 +66,11 @@ def send_killevt(queue):
 	qpush(evt)
 
 
+def send_rfid_removed(queue):
+	evt = Event(Event.RFID_REMOVED)
+	qpush(evt)
+
+
 def send_invalid(queue):
 	evt = Event(Event.INVALID)
 	evt.type = "what is this?"
@@ -73,6 +79,18 @@ def send_invalid(queue):
 
 def send_wrong_type(queue):
 	evt = "not an event"
+	qpush(evt)
+
+
+def send_register(queue):
+	evt = Event(Event.REGISTRATION_REQUESTED)
+	# delete this
+	giulio = User()
+	giulio.name = "Giulio"
+	giulio.tag = 797313096147
+	giulio.glass_capacity = 250
+	giulio.glass_weight = 280
+	evt.user = giulio
 	qpush(evt)
 
 
@@ -96,11 +114,20 @@ def core_test():
 	send_wrong_type(main_queue)
 	assert (context.state == Context.State.IDLE)
 
-	send_rfid("ifoifjo23iofj", main_queue)
+	send_rfid(565454684, main_queue)
 	assert (context.state == Context.State.GLASS_ON)
 
 	context.initialize()
-	send_rfid("ifoifjo23iofj", main_queue)
+	send_rfid(797313096147, main_queue)
+	assert (timeout(0.01, context.state, Context.State.GLASS_ON))
+
+	send_register(main_queue)
+	assert (timeout(0.01, context.state, Context.State.GLASS_ON))
+
+	send_rfid_removed(main_queue)
+	assert (timeout(0.01, context.state, Context.State.IDLE))
+
+	send_rfid(797313096147, main_queue)
 	assert (timeout(0.01, context.state, Context.State.GLASS_ON))
 
 	send_killevt(main_queue)

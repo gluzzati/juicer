@@ -5,7 +5,6 @@ from core import log
 from core.context import Context
 from core.events import Event
 from core.reactor import ReactorThread
-from core.user import User
 from rfid.rfid import RfidThread
 
 
@@ -18,14 +17,6 @@ def main():
 	# - rfid thread
 
 	context = Context()
-
-	# delete this
-	giulio = User()
-	giulio.name = "Giulio"
-	giulio.tag = 797313096147
-	giulio.glass_capacity = 250
-	giulio.glass_weight = 280
-	context.database.add_user(giulio)
 
 	core_th = ReactorThread(context)
 	rfid_th = RfidThread(context.queue)

@@ -16,7 +16,7 @@ class Database:
 			log.debug("not in DB " + str(rfid))
 			return False, None
 
-	def add_user(self, user):
+	def add(self, user):
 		if not isinstance(user, User):
 			log.error("trying to add user with wrong type " + str(type(user)))
 			return False
@@ -25,6 +25,5 @@ class Database:
 			return False
 
 		self.table[user.tag] = user
-
-		log.debug("successfully added " + user.name + " to database")
+		log.debug("db records successfully updated - " + user.to_string())
 		return True

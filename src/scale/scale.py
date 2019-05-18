@@ -17,7 +17,7 @@ class FakeScale:
 		pass
 
 	def get_weight(self):
-		return 11
+		return 286.5
 
 
 class Scale:

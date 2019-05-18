@@ -12,14 +12,12 @@ class Context:
 		IDLE = "IDLE"
 		GLASS_ON = "GLASS_ON"
 		POURING = "POURING"
-		REGISTERING = "REGISTERING"
 
 		ALLOWABLE = [
 			UNINIT,
 			IDLE,
 			GLASS_ON,
 			POURING,
-			REGISTERING,
 		]
 
 	@staticmethod
@@ -44,7 +42,6 @@ class Context:
 			Context.State.IDLE: self.on_idle,
 			Context.State.GLASS_ON: self.on_glass_on,
 			Context.State.POURING: self.on_pouring,
-			Context.State.REGISTERING: self.on_registering,
 		}
 
 	def set_scale(self, scale):
@@ -86,8 +83,4 @@ class Context:
 
 	def on_pouring(self):
 		log.debug("on pouring")
-		pass
-
-	def on_registering(self):
-		log.debug("on registering")
 		pass
