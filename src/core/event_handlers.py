@@ -40,7 +40,6 @@ def rfid_removed_handler(ctx, evt):
 		next_state = Context.State.IDLE
 	else:
 		log.debug("removed rfid, but there was no glass, mumble mumble... " + ctx.state)
-
 	return True, next_state
 
 

@@ -1,6 +1,5 @@
 from queue import Queue
 
-from core import log
 from core.database import Database
 from gui.gui import GuiProxy
 from relay.relay import Relay
@@ -41,10 +40,3 @@ class Context:
 		self.relay = Relay()
 		self.relay.set_pourer(2)
 		self.initialize()
-
-	def set_scale(self, scale):
-		if not isinstance(scale, Scale):
-			log.error("trying to set scale with wrong type " + str(type(scale)))
-			pass
-		else:
-			self.scale = scale

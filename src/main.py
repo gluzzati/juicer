@@ -13,6 +13,17 @@ def main():
 
 	context = Context()
 
+	# todo delete
+	from core.user import User
+	giulio = User()
+	giulio.name = "Giulio"
+	giulio.tag = 797313096147
+	giulio.glass.capacity = 250
+	giulio.glass.weight = 280
+	evt = Event(Event.REGISTRATION_REQUESTED)
+	evt.user = giulio
+	context.queue.put(evt)
+
 	core_th = ReactorThread(context)
 	rfid_th = RfidThread(context.queue)
 	# gui_th = GuiThread(context.queue)
@@ -21,17 +32,6 @@ def main():
 		core_th.start()
 		rfid_th.start()
 		# gui_th.start()
-
-		# todo delete
-		from core.user import User
-		giulio = User()
-		giulio.name = "Giulio"
-		giulio.tag = 797313096147
-		giulio.glass.capacity = 250
-		giulio.glass.weight = 280
-		evt = Event(Event.REGISTRATION_REQUESTED)
-		evt.user = giulio
-		core_th.ctx.queue.put(evt)
 
 		rfid_th.join()
 		core_th.join()

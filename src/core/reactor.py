@@ -23,14 +23,12 @@ class Reactor:
 		self.handlers = dict()
 		self.callbacks = dict()
 
-		# handlers
 		self.add_handler(Event.RFID_DETECTED, rfid_detected_handler)
 		self.add_handler(Event.RFID_REMOVED, rfid_removed_handler)
 		self.add_handler(Event.REGISTRATION_REQUESTED, registration_requested_handler)
 		self.add_handler(Event.AUTO_WATEROFF, auto_wateroff_handler)
 		self.add_handler(Event.POUR_REQUESTED, pour_requested_handler)
 
-		# statechange handlers
 		self.add_statecallback(Context.State.IDLE, on_idle)
 		self.add_statecallback(Context.State.GLASS_ON, on_glass_on)
 		self.add_statecallback(Context.State.POURING, on_pouring)
@@ -57,6 +55,7 @@ class Reactor:
 
 	def run(self):
 		while self.ctx.running:
+
 			ok, evt = get_evt(self.ctx)
 
 			if not ok or evt.too_old():
