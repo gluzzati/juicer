@@ -10,13 +10,9 @@ from core.events import Event
 from core.reactor import Reactor
 from core.user import User
 from gui.gui import GuiProxy
+from relay.relay import Relay
 from rfid.rfid import RFID
-from scale.scale import FakeScale, Scale
-
-
-class Object(object):
-	pass
-
+from scale.scale import FakeScale
 
 log.loglevel = log.LVL_DBG
 
@@ -126,8 +122,8 @@ def core_test():
 	send_rfid_removed(main_queue)
 	assert (timeout(0.01, context.state, Context.State.IDLE))
 
-	send_rfid(797313096147, main_queue)
-	assert (timeout(0.01, context.state, Context.State.GLASS_ON))
+	# send_rfid(797313096147, main_queue)
+	# assert (timeout(0.01, context.state, Context.State.GLASS_ON))
 
 	send_killevt(main_queue)
 	main_t.join()
@@ -136,7 +132,7 @@ def core_test():
 
 def scale_test():
 	log.ok("testing scale..")
-	scale = Scale()
+	scale = context.scale
 	for i in range(3):
 		w = scale.get_weight()
 		log.ok("weight = " + str(w))
@@ -160,6 +156,14 @@ def rfid_test():
 
 def relay_test():
 	log.ok("testing relay..")
+	relay = Relay()
+	relay.set_pourer(2)
+	abit = 0.05
+	for i in range(5):
+		relay.water_on()
+		time.sleep(abit)
+		relay.water_off()
+		time.sleep(abit)
 
 
 if __name__ == "__main__":

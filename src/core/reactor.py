@@ -1,7 +1,5 @@
-from threading import Thread
-
 from core.event_handlers import *
-from core.events import Event
+from core.state_callbacks import *
 
 
 def get_evt(ctx):
@@ -23,16 +21,39 @@ class Reactor:
 		self.ctx = context
 		self.ctx.running = True
 		self.handlers = dict()
-		self.handle_unknown_evt = unknown_event_handler
+		self.callbacks = dict()
 
 		# handlers
 		self.add_handler(Event.RFID_DETECTED, rfid_detected_handler)
 		self.add_handler(Event.RFID_REMOVED, rfid_removed_handler)
 		self.add_handler(Event.REGISTRATION_REQUESTED, registration_requested_handler)
 		self.add_handler(Event.AUTO_WATEROFF, auto_wateroff_handler)
+		self.add_handler(Event.POUR_REQUESTED, pour_requested_handler)
+
+		# statechange handlers
+		self.add_statecallback(Context.State.IDLE, on_idle)
+		self.add_statecallback(Context.State.GLASS_ON, on_glass_on)
+		self.add_statecallback(Context.State.POURING, on_pouring)
 
 	def add_handler(self, evt_type, handler):
 		self.handlers[evt_type] = handler
+
+	def add_statecallback(self, state, callback):
+		self.callbacks[state] = callback
+
+	def handle(self, evt):
+		if evt.type in self.handlers:
+			return self.handlers[evt.type](self.ctx, evt)
+		else:
+			log.error("unknown event " + evt.type)
+			return False, None
+
+	def change_state(self, next_state):
+		if next_state in self.callbacks:
+			return self.callbacks[next_state](self.ctx)
+		else:
+			log.error("unknown state " + str(next_state))
+			return False, None
 
 	def run(self):
 		while self.ctx.running:
@@ -41,11 +62,8 @@ class Reactor:
 			if not ok or evt.too_old():
 				continue
 
-			if evt.type not in self.handlers:
-				ok, res = self.handle_unknown_evt(self.ctx, evt)
-				continue
-
-			ok, res = self.handlers[evt.type](self.ctx, evt)
+			ok, next_state = self.handle(evt)
+			ok, res = self.change_state(next_state)
 
 		return 0
 
