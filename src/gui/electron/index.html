@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+<style>
+    ::-webkit-scrollbar {
+        display: none;
+    }
+
+    html, body {
+        margin: 0;
+        height: 100%;
+    }
+
+    .padded {
+        padding: 1em;
+        background-color: black;
+    }
+
+    div.fixed {
+        display: block;
+        height: 11em;
+        overflow: scroll;
+    }
+
+    .glass-svg {
+        transform: scale(1);
+        fill: blue;
+    }
+
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>Hello Python from Electron!</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-keyboard@latest/build/css/index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.4/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.8.2/js/all.js"
+            integrity="sha384-DJ25uNYET2XCl5ZF++U8eNxPWqcKohUUBUpKGlNLMchM7q4Wjg2CUpjHLaL8yYPH"
+            crossorigin="anonymous"></script>
+
+</head>
+<body class="padded is-dark is-bold" onload="startTime()">
+<div class="level">
+    <!-- Left side -->
+    <div class="level-left">
+
+    </div>
+
+    <!-- Right side -->
+    <div class="level-right">
+        <script src="clock.js"></script>
+        <a id="clock"></a>
+    </div>
+</div>
+<div class="tile is-ancestor">
+    <div class="tile is-parent is-vertical">
+        <div class="tile">
+            <div class="tile is-parent">
+                <article class="tile is-child notification has-text-centered	has-background-black-bis	has-text-grey	">
+                    <p class="title " id="main_pane_title">Hi <i class="far fa-smile "></i></p>
+                    <p id="main_pane_text">
+                    </p>
+
+                    <img class="glass-svg" src="glass.svg" />
+
+
+                </article>
+            </div>
+
+            <div class="is-4 tile is-parent is-vertical">
+                <article class="button tile is-child notification is-rounded is-info">
+                    <p class="title"><i class="fas fa-tint"></i></p>
+                </article>
+                <article class="button  tile is-child notification is-rounded is-danger">
+                    <p class="title"><i class="fas fa-tint-slash"></i></p>
+                </article>
+            </div>
+        </div>
+
+        <div class="fixed">
+            <div class="tile is-parent">
+                <article class="tile  is-child notification is-bold has-background-black-bis	has-text-grey-darker">
+                    <p id="bottom_pane_title"></p>
+                    <p id="bottom_pane_text">some info</p>
+                </article>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
