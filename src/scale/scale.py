@@ -35,7 +35,7 @@ class Scale:
 		log.debug("tare complete, scale ready")
 
 	def get_weight(self):
-		return self.hx.get_weight(3)
+		return self.hx.get_weight(1)
 
 
 def request_weight_measure(scale, queue):

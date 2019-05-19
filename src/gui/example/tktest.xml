@@ -1,0 +1,11 @@
+<form>
+    <label>
+        <text>entry:</text>
+    </label>
+    <entry width='30' bg='gold'/>
+    <checkbutton>
+        <text>checkbutton</text>
+    </checkbutton>
+    <button text='OK'/>
+    <button text='Cancel'/>
+</form>

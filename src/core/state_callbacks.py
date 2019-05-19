@@ -17,15 +17,22 @@ class Safety(Thread):
 		self.queue = queue
 		super().__init__()
 
+	def glass_percent(self):
+		weight = self.scale.get_weight()
+		full = self.glass.weight + self.glass.capacity
+		percent = weight / full * 100
+		log.debug("{}% full".format(percent))
+		return percent
+
 	def glass_full(self):
-		return self.scale.get_weight() > (GUARD * (self.glass.weight + self.glass.capacity))
+		return self.glass_percent() >= (100 * GUARD)
 
 	def run(self):
-		start = time.time()
-		elapsed = time.time() - start
+		elapsed = 0
+		DT = 0.1
 		while elapsed < SAFETY_TIMEOUT and self.relay.pouring and not self.glass_full():
-			time.sleep(0.1)
-			elapsed = time.time() - start
+			time.sleep(DT)
+			elapsed += DT
 
 		if self.relay.pouring:
 			self.relay.water_off()
@@ -56,8 +63,12 @@ def on_glass_on(ctx):
 
 def on_pouring(ctx):
 	log.debug("on pouring")
-	timer = Safety(ctx.relay, ctx.scale, ctx.user.glass, ctx.queue)
-	ctx.state = Context.State.POURING
-	ctx.relay.water_on()
-	timer.start()
-	return True, None
+	if ctx.onscale < ctx.user.glass.capacity + ctx.user.glass.weight:
+		timer = Safety(ctx.relay, ctx.scale, ctx.user.glass, ctx.queue)
+		ctx.state = Context.State.POURING
+		ctx.relay.water_on()
+		timer.start()
+		return True, None
+	else:
+		log.warn("glass already full")
+		return False, None

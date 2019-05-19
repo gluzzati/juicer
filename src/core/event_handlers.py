@@ -4,6 +4,7 @@ from core.events import Event
 
 
 def rfid_detected_handler(ctx, evt):
+	ctx.onscale = ctx.scale.get_weight()
 	log.debug("rfid detected handler: " + str(evt.rfid))
 	next_state = ctx.state
 
@@ -16,7 +17,7 @@ def rfid_detected_handler(ctx, evt):
 	known, user = ctx.database.lookup_rfid(evt.rfid)
 	if known:
 		ctx.user = user
-		current_water = ctx.scale.get_weight() - user.glass.weight
+		current_water = ctx.onscale - user.glass.weight
 		missing_water = user.glass.capacity - current_water
 		ctx.gui.update(
 			"hello, {}! your glass holds {}ml, do you want to fill up with {}ml?".format(
