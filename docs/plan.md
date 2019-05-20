@@ -10,13 +10,13 @@
 * ~~buy 12v supply (and 5v?)~~
 * ~~define MQ framework~~ 
 * ~~define state, headers / python defs~~
-* GUI framweork
+* ~~GUI framweork~~
     * stub dashboard 
     * two panes / debug -> whole state log
 * ~~daemons: weight, rfid~~
-    * define tests
-    * code mockups 
-* buy darlington for relayboard
+    * ~~define tests~~
+    * ~~code mockups~~
+* ~~buy darlington for relayboard~~ not necessary
  
 
 * ~~solder rfid board~~
