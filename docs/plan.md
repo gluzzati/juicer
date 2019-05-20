@@ -11,8 +11,8 @@
 * ~~define MQ framework~~ 
 * ~~define state, headers / python defs~~
 * ~~GUI framweork~~
-    * stub dashboard 
-    * two panes / debug -> whole state log
+    * ~~stub dashboard~~
+    * ~~two panes / debug -> whole state log~~
 * ~~daemons: weight, rfid~~
     * ~~define tests~~
     * ~~code mockups~~
