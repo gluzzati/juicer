@@ -6,7 +6,6 @@ import time
 from queue import Queue
 
 from core.event_handlers import *
-from core.events import Event
 from core.reactor import Reactor
 from core.user import User
 from gui.gui import GuiProxy
@@ -33,7 +32,7 @@ class MainThread(threading.Thread):
 	def run(self):
 		context.queue = self.queue
 		consumer = Reactor(context)
-		consumer.add_handler(Event.RFID_DETECTED, rfid_detected_handler)
+		consumer.add_handler(EventType.RFID_DETECTED, rfid_detected_handler)
 		context.scale = FakeScale()
 		context.gui = GuiProxy()
 		self.retcode = consumer.run()
@@ -46,30 +45,30 @@ def qpush(evt):
 
 
 def send_json_msg(msg, queue):
-	evt = Event(Event.JSON)
-	evt.data = str.encode(msg)
+	evt = create_event(EventType.JSON)
+	evt["data"] = str.encode(msg)
 	qpush(evt)
 
 
 def send_rfid(rfid, queue):
-	evt = Event(Event.RFID_DETECTED)
-	evt.rfid = rfid
+	evt = create_event(EventType.RFID_DETECTED)
+	evt[EventKey.rfid] = rfid
 	qpush(evt)
 
 
 def send_killevt(queue):
-	evt = Event(Event.SIGINT)
+	evt = create_event(EventType.SIGINT)
 	qpush(evt)
 
 
 def send_rfid_removed(queue):
-	evt = Event(Event.RFID_REMOVED)
+	evt = create_event(EventType.RFID_REMOVED)
 	qpush(evt)
 
 
 def send_invalid(queue):
-	evt = Event(Event.INVALID)
-	evt.type = "what is this?"
+	evt = create_event(EventType.INVALID)
+	evt["type"] = "what is this?"
 	qpush(evt)
 
 
@@ -79,13 +78,13 @@ def send_wrong_type(queue):
 
 
 def send_register(queue):
-	evt = Event(Event.REGISTRATION_REQUESTED)
+	evt = create_event(EventType.REGISTRATION_REQUESTED)
 	giulio = User()
 	giulio.name = "Giulio"
 	giulio.tag = 797313096147
 	giulio.glass.capacity = 250
 	giulio.glass.weight = 280
-	evt.user = giulio
+	evt[EventKey.user] = giulio
 	qpush(evt)
 
 

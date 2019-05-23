@@ -13,7 +13,7 @@ LabelFrame:
     text: checkbutton
     column: 1
     row: 0
-    command: printcazzo
+    command: mycommand
   Entry:
     name: entry
     text: checkbutton

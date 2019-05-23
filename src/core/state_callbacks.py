@@ -3,7 +3,7 @@ from threading import Thread
 
 from core import log
 from core.context import Context
-from core.events import Event
+from core.events import EventType, create_event, EventKey
 
 SAFETY_TIMEOUT = 5
 GUARD = 0.9
@@ -36,15 +36,15 @@ class Safety(Thread):
 
 		if self.relay.pouring:
 			self.relay.water_off()
-			evt = Event(Event.AUTO_WATEROFF)
-			evt.cause = None
+			evt = create_event(EventType.AUTO_WATEROFF)
+			evt[EventKey.cause] = None
 			log.warn("auto off")
 			if elapsed > SAFETY_TIMEOUT:
 				log.warn("timed out")
-				evt.cause = "TIMEOUT"
+				evt[EventKey.cause] = "TIMEOUT"
 			if self.glass_full():
 				log.warn("glass full")
-				evt.cause = "GLASS_FULL"
+				evt[EventKey.cause] = "GLASS_FULL"
 			self.queue.put(evt)
 
 
