@@ -1,6 +1,7 @@
 from core import log
 from core.context import Context
 from core.events import EventType, create_event, EventKey
+from core.user import User, Glass
 
 
 def rfid_detected_handler(ctx, evt):
@@ -54,7 +55,14 @@ def auto_wateroff_handler(ctx, evt):
 
 
 def registration_requested_handler(ctx, evt):
-    user = evt[EventKey.user]
+    userdict = evt[EventKey.user]
+    user = User()
+    user.name = userdict[User.Key.name]
+    user.glass = Glass()
+    user.glass.weight = userdict[User.Key.glass][Glass.Key.weight]
+    user.glass.capacity = userdict[User.Key.glass][Glass.Key.capacity]
+    user.tag = userdict[User.Key.tag]
+
     exists, _ = ctx.database.lookup_rfid(user.tag)
     if exists:
         log.warn("user \"{}\" already exists in db - updating records".format(user.name))
@@ -66,5 +74,5 @@ def pour_requested_handler(ctx, evt):
     if ctx.state is Context.State.GLASS_ON:
         return True, Context.State.POURING
     else:
-        log.info("POUR button press ignored")
+        log.info("NO GLASS - POUR button press ignored")
         return True, ctx.state

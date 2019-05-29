@@ -3,7 +3,7 @@ import time
 
 from core import log
 
-OBLIVION = 2  # seconds
+OBLIVION = float('inf')  # seconds
 
 
 class EventKey:
@@ -13,6 +13,20 @@ class EventKey:
     user = "user"
     rfid = "rfid"
     cause = "cause"
+
+
+RequiredEventKeys = [EventKey.timestamp, EventKey.type]
+
+
+def validate(evt):
+    for key in RequiredEventKeys:
+        if key not in evt:
+            return False
+
+    if type(evt[EventKey.timestamp]) is not float:
+        return False
+
+    return True
 
 
 class EventType:
@@ -46,4 +60,9 @@ def evt2json(evt):
 
 
 def json2evt(json_string):
-    return json.loads(json_string)
+    try:
+        out = json.loads(json_string)
+        return True, out
+    except json.decoder.JSONDecodeError as e:
+        log.error("error converting json to evt: " + str(e))
+        return False, None

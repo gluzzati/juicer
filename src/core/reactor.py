@@ -1,14 +1,17 @@
+from core.aws_proxy import AWSProxy
 from core.event_handlers import *
-from core.events import too_old
+from core.events import too_old, evt2json
 from core.state_callbacks import *
 
 
 def get_evt(ctx):
     evt = ctx.queue.get(True)
 
-    if not isinstance(evt, dict):
-        log.error("not an event (" + str(type(evt)) + ")")
+    if not isinstance(evt, dict) or EventKey.type not in evt:
+        log.error("Malformed event " + str(evt))
         return False, None
+
+    log.debug("got evt type: " + evt[EventKey.type])
 
     if evt[EventKey.type] == EventType.SIGINT:
         ctx.running = False
@@ -23,6 +26,14 @@ class Reactor:
         self.ctx.running = True
         self.handlers = dict()
         self.callbacks = dict()
+        args = self.ctx.args
+        host = args.host
+        rootCAPath = args.rootCAPath
+        certificatePath = args.certificatePath
+        privateKeyPath = args.privateKeyPath
+        clientID = "juicer-backend"
+        self.aws_proxy = AWSProxy(host, rootCAPath, certificatePath, privateKeyPath, clientID, self.ctx.queue)
+        self.aws_proxy.register()
 
         self.add_handler(EventType.RFID_DETECTED, rfid_detected_handler)
         self.add_handler(EventType.RFID_REMOVED, rfid_removed_handler)
@@ -41,6 +52,7 @@ class Reactor:
         self.callbacks[state] = callback
 
     def handle(self, evt):
+        self.aws_proxy.publish(evt2json(evt))
         if evt[EventKey.type] in self.handlers:
             return self.handlers[evt[EventKey.type]](self.ctx, evt)
         else:

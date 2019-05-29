@@ -1,3 +1,4 @@
+import os
 from queue import Queue
 
 from core.database import Database
@@ -5,6 +6,7 @@ from gui.gui import GuiProxy
 from relay.relay import Relay
 from scale.scale import Scale
 
+CWD = os.getcwd() + "/"
 
 class Context:
 	class State:
@@ -29,7 +31,8 @@ class Context:
 	def initialize(self):
 		self.state = Context.State.IDLE
 
-	def __init__(self):
+	def __init__(self, args):
+		self.args = args
 		self.valid = True
 		self.state = Context.State.UNINIT
 		self.gui = GuiProxy()
