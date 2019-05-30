@@ -6,6 +6,7 @@ import time
 from queue import Queue
 
 from core.event_handlers import *
+from core.faucet import Faucet
 from core.reactor import Reactor
 from core.user import User
 from gui.gui import GuiProxy
@@ -17,7 +18,7 @@ log.loglevel = log.LVL_DBG
 
 # globally expose internals
 main_queue = Queue()
-context = Context()
+context = Context(None)
 
 
 class MainThread(threading.Thread):
@@ -165,6 +166,11 @@ def relay_test():
 		time.sleep(abit)
 
 
+def faucet_test():
+	faucet = Faucet()
+	pass
+
+
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--scale', help='perform scale test', action='store_true')
@@ -173,6 +179,7 @@ if __name__ == "__main__":
 	parser.add_argument('--allio', help='perform all sensors/io tests', action='store_true')
 	parser.add_argument('--all', help='perform all tests', action='store_true')
 	parser.add_argument('--core', help='perform core test', action='store_true')
+	parser.add_argument('--faucet', help='perform faucet test', action='store_true')
 
 	args = parser.parse_args()
 	if len(sys.argv) == 1:
@@ -184,6 +191,8 @@ if __name__ == "__main__":
 		rfid_test()
 	if args.relay or args.all or args.allio:
 		relay_test()
+	if args.faucet or args.all:
+		faucet_test()
 	if args.core or args.all:
 		core_test()
 

@@ -27,13 +27,14 @@ class Reactor:
         self.handlers = dict()
         self.callbacks = dict()
         args = self.ctx.args
-        host = args.host
-        rootCAPath = args.rootCAPath
-        certificatePath = args.certificatePath
-        privateKeyPath = args.privateKeyPath
-        clientID = "juicer-backend"
-        self.aws_proxy = AWSProxy(host, rootCAPath, certificatePath, privateKeyPath, clientID, self.ctx.queue)
-        self.aws_proxy.register()
+        if args:
+            host = args.host
+            rootCAPath = args.rootCAPath
+            certificatePath = args.certificatePath
+            privateKeyPath = args.privateKeyPath
+            clientID = "juicer-backend"
+            self.aws_proxy = AWSProxy(host, rootCAPath, certificatePath, privateKeyPath, clientID, self.ctx.queue)
+            self.aws_proxy.register()
 
         self.add_handler(EventType.RFID_DETECTED, rfid_detected_handler)
         self.add_handler(EventType.RFID_REMOVED, rfid_removed_handler)
@@ -52,7 +53,8 @@ class Reactor:
         self.callbacks[state] = callback
 
     def handle(self, evt):
-        self.aws_proxy.publish(evt2json(evt))
+        if self.aws_proxy:
+            self.aws_proxy.publish(evt2json(evt))
         if evt[EventKey.type] in self.handlers:
             return self.handlers[evt[EventKey.type]](self.ctx, evt)
         else:
