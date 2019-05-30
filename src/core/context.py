@@ -2,6 +2,7 @@ import os
 from queue import Queue
 
 from core.database import Database
+from flow_meter.flowmeter import FlowMeter
 from gui.gui import GuiProxy
 from relay.relay import Relay
 from scale.scale import Scale
@@ -43,3 +44,4 @@ class Context:
 		self.relay = Relay()
 		self.relay.set_pourer(2)
 		self.initialize()
+		self.flowmeter = FlowMeter(18, 4.25)  # todo: dehardcode pin
