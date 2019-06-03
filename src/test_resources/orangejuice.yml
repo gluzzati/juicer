@@ -1,0 +1,8 @@
+orange_juice:
+  steps:
+    - [water, 100]
+    - [orange, 50.0]
+    - [water, 50]
+  taps:
+    water: 1
+    orange: 2
