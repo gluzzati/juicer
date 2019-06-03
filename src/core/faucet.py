@@ -1,3 +1,5 @@
+import time
+
 import yaml
 
 from core import log
@@ -44,6 +46,17 @@ def parse(yml):
     return True, recipe_name, steps, taps
 
 
+def parse_recipe_file(file):
+    r = Recipe()
+    with open(file, "r") as stream:
+        try:
+            r.from_ymlfile(stream)
+        except yaml.YAMLError as e:
+            log.error("yaml error! couldnt parse " + file)
+            return False, None
+    return True, r
+
+
 class Recipe:
     def __init__(self):
         self.steps = list()
@@ -60,7 +73,6 @@ class Recipe:
         self.name = name
         self.steps = steps
         self.taps = taps
-
         pass
 
 
@@ -77,6 +89,7 @@ class Faucet:
             for tap, amount in recipe.steps:
                 if tap in self.taps_board.relays:
                     self.taps_board.relays[tap].pour(amount)
+                    time.sleep(1)
                 else:
                     log.error("unknown tap " + tap)
 
