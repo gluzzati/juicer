@@ -9,40 +9,41 @@ from scale.scale import Scale
 
 CWD = os.getcwd() + "/"
 
+
 class Context:
-	class State:
-		UNINIT = "UNINIT"
-		IDLE = "IDLE"
-		GLASS_ON = "GLASS_ON"
-		POURING = "POURING"
+    class State:
+        UNINIT = "UNINIT"
+        IDLE = "IDLE"
+        GLASS_ON = "GLASS_ON"
+        POURING = "POURING"
 
-		ALLOWABLE = [
-			UNINIT,
-			IDLE,
-			GLASS_ON,
-			POURING,
-		]
+        ALLOWABLE = [
+            UNINIT,
+            IDLE,
+            GLASS_ON,
+            POURING,
+        ]
 
-	@staticmethod
-	def is_valid_state(state):
-		if not isinstance(state, str):
-			return False
-		return state in Context.State.ALLOWABLE
+    @staticmethod
+    def is_valid_state(state):
+        if not isinstance(state, str):
+            return False
+        return state in Context.State.ALLOWABLE
 
-	def initialize(self):
-		self.state = Context.State.IDLE
+    def initialize(self):
+        self.state = Context.State.IDLE
 
-	def __init__(self, args):
-		self.args = args
-		self.valid = True
-		self.state = Context.State.UNINIT
-		self.gui = GuiProxy()
-		self.database = Database()
-		self.user = None
+    def __init__(self, args):
+        self.args = args
+        self.valid = True
+        self.state = Context.State.UNINIT
+        self.gui = GuiProxy()
+        self.database = Database()
+        self.user = None
 
-		self.scale = Scale()
-		self.queue = Queue()
-		self.initialize()
-		self.flowmeter = FlowMeter(18, 4.25)  # todo: dehardcode pin
+        self.scale = Scale()
+        self.queue = Queue()
+        self.initialize()
+        self.flowmeter = FlowMeter(18, 4.25)  # todo dehardcode pins
         self.relay = Relay(self.flowmeter)
         self.relay.set_pourer(2)
