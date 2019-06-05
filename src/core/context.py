@@ -39,9 +39,10 @@ class Context:
 		self.gui = GuiProxy()
 		self.database = Database()
 		self.user = None
+
 		self.scale = Scale()
 		self.queue = Queue()
-		self.relay = Relay()
-		self.relay.set_pourer(2)
 		self.initialize()
 		self.flowmeter = FlowMeter(18, 4.25)  # todo: dehardcode pin
+        self.relay = Relay(self.flowmeter)
+        self.relay.set_pourer(2)
