@@ -5,7 +5,6 @@ from queue import Queue
 from core import log
 from core.database import Database
 from core.faucet import Faucet, parse_recipe_file
-from flow_meter.flowmeter import FlowMeter
 from gui.gui import GuiProxy
 from relay.relay import RelayBoard
 from scale.scale import Scale
@@ -58,11 +57,10 @@ class Context:
         self.queue = Queue()
 
         # todo: dehardcode gpio pins to config file!
-        self.flowmeter = FlowMeter(18, 4.25)
         self.relay_board = RelayBoard([
             ["water", 2],
             ["orange", 3],
-        ], self.flowmeter)
+        ])
 
         self.faucet = Faucet(self.relay_board)
         self.recipes = parse_recipes()

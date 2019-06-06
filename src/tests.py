@@ -162,9 +162,9 @@ def relay_test():
     relay.set_pourer(2)
     abit = 0.05
     for i in range(5):
-        relay.liquid_on()
+        relay.open()
         time.sleep(abit)
-        relay.liquid_off()
+        relay.close()
         time.sleep(abit)
 
 

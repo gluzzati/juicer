@@ -35,7 +35,7 @@ class Safety(Thread):
             elapsed += DT
 
         if self.relay_board.pouring():
-            self.relay_board.liquid_off()
+            self.relay_board.close()
             evt = create_event(EventType.AUTO_WATEROFF)
             evt[EventKey.cause] = None
             log.warn("auto off")
@@ -72,7 +72,7 @@ def on_pouring(ctx):
     if ctx.onscale < max:
         timer = Safety(ctx.relay_board, ctx.scale, max, ctx.queue)
         ctx.state = Context.State.POURING
-        ctx.faucet.dispense(ctx.recipes[ctx.requested_recipe])
+        ctx.relay_board.relays["water"].open()
         timer.start()
         return True, None
     else:
