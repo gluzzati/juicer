@@ -50,3 +50,15 @@ class RelayBoard:
     def shut_all(self):
         for relay in self.relays:
             self.relays[relay].close()
+
+    def open(self, name):
+        if name in self.relays:
+            self.relays[name].open()
+        else:
+            log.error("no known tap for \"" + name + "\"")
+
+    def close(self, name):
+        if name in self.relays:
+            self.relays[name].close()
+        else:
+            log.error("no known tap for \"" + name + "\"")

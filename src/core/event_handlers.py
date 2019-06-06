@@ -73,8 +73,12 @@ def registration_requested_handler(ctx, evt):
 
 def pour_requested_handler(ctx, evt):
     if ctx.state is Context.State.GLASS_ON:
-        ctx.requested_recipe = evt[EventKey.requested_recipe]
-        return True, Context.State.POURING
+        recipe_name = evt[EventKey.requested_recipe]
+        if recipe_name in ctx.recipes:
+            ctx.requested_recipe = ctx.recipes[recipe_name]
+            return True, Context.State.POURING
+        else:
+            return False, ctx.state
     else:
         log.info("NO GLASS - POUR button press ignored")
         return True, ctx.state
