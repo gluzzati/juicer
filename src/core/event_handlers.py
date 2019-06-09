@@ -1,6 +1,6 @@
 from core import log
 from core.context import Context
-from core.events import EventType, create_event, EventKey
+from core.events import EventKey
 from core.recipe import Recipe
 from core.user import User, Glass
 
@@ -24,11 +24,6 @@ def rfid_detected_handler(ctx, evt):
         ctx.gui.update(
             "hello, {}! your glass holds {}ml, do you want to fill up with {}ml?".format(
                 user.name, user.glass.capacity, missing_water))
-
-        # todo delete this
-        evt = create_event(EventType.POUR_REQUESTED)
-        evt[EventKey.requested_recipe] = "orange_juice"
-        ctx.queue.put(evt)
     else:
         ctx.gui.update("Hi stranger! want to register?")
 
