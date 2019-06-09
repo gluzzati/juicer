@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import argparse
+import configparser
 
 from RPi import GPIO
 
@@ -12,8 +13,8 @@ from core.user import parse_user_list_file
 from rfid.rfid import RfidThread
 
 
-def parse_users(ctx):
-    ok, users = parse_user_list_file("resources/users.yml")
+def parse_users(ctx, file):
+    ok, users = parse_user_list_file(file)
     if ok:
         log.ok("found " + str(len(users)) + " users")
         for user in users:
@@ -23,8 +24,8 @@ def parse_users(ctx):
             ctx.queue.put(evt)
 
 
-def parse_recipes(ctx):
-    ok, recipes = parse_recipes_list_file("resources/recipes.yml")
+def parse_recipes(ctx, file):
+    ok, recipes = parse_recipes_list_file(file)
     if ok:
         log.ok("found " + str(len(recipes)) + " recipes")
         for recipe in recipes:
@@ -37,10 +38,12 @@ def parse_recipes(ctx):
 def main(args):
     log.loglevel = log.LVL_DBG
 
-    context = Context(args)
+    conf = configparser.ConfigParser()
+    conf.read("resources/config.ini")
+    context = Context(conf)
 
-    parse_users(context)
-    parse_recipes(context)
+    parse_users(context, conf["users"]["file"])
+    parse_recipes(context, conf["recipes"]["file"])
 
     core_th = ReactorThread(context)
     rfid_th = RfidThread(context.queue)

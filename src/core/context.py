@@ -30,21 +30,26 @@ class Context:
     def initialize(self):
         self.state = Context.State.IDLE
 
-    def __init__(self, args):
-        self.args = args
+    def __init__(self, config):
         self.valid = True
+        self.config = config
         self.state = Context.State.UNINIT
         self.gui = GuiProxy()
         self.database = Database()
         self.user = None
-        self.scale = Scale()
+
+        scale_cfg = config["scale"]
+        DOUT = int(scale_cfg["DOUT"])
+        SCK = int(scale_cfg["SCK"])
+        self.scale = Scale(DOUT, SCK)
         self.queue = Queue()
 
-        # todo: dehardcode gpio pins to config file!
-        self.relay_board = RelayBoard([
-            ["water", 2],
-            ["orange", 3],
-        ])
+        taps = list()
+        relay_board_cfg = config["relay_board"]
+        for tap in relay_board_cfg:
+            taps.append([tap, int(relay_board_cfg[tap])])
+
+        self.relay_board = RelayBoard(taps)
 
         self.recipes = dict()
         self.initialize()

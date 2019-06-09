@@ -3,13 +3,9 @@ from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 from core import log
 from core.events import json2evt, EventKey, validate
 
-port = 8883
-pub_topic = "juicer_events"
-sub_topic = "juicer_commands"
-
 
 class AWSProxy:
-    def __init__(self, endpoint, rootCA, cert, key, clientId, main_queue):
+    def __init__(self, endpoint, rootCA, cert, key, clientId, pub_topic, sub_topic, port, main_queue):
         self.key = key
         self.rootCA = rootCA
         self.cert = cert

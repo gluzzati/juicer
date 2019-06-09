@@ -26,18 +26,22 @@ class Reactor:
         self.ctx.running = True
         self.handlers = dict()
         self.callbacks = dict()
-        args = self.ctx.args
         try:
-            host = args.host
-            rootCAPath = args.rootCAPath
-            certificatePath = args.certificatePath
-            privateKeyPath = args.privateKeyPath
-            clientID = "juicer-backend"
-            self.aws_proxy = AWSProxy(host, rootCAPath, certificatePath, privateKeyPath, clientID, self.ctx.queue)
+            aws_cfg = self.ctx.config["aws"]
+            host = aws_cfg["host"]
+            rootCAPath = aws_cfg["root_ca"]
+            certificatePath = aws_cfg["pem"]
+            privateKeyPath = aws_cfg["private_k"]
+            clientID = aws_cfg["client_id"]
+            pub_topic = aws_cfg["pub_topic"]
+            sub_topic = aws_cfg["sub_topic"]
+            port = int(aws_cfg["port"])
+            self.aws_proxy = AWSProxy(host, rootCAPath, certificatePath, privateKeyPath, clientID, pub_topic, sub_topic,
+                                      port, self.ctx.queue)
             self.aws_proxy.register()
         except Exception as e:
             log.warn("exc: " + str(e))
-            log.warn("no aws parameters passed, skipping amazon registration...")
+            log.warn("no aws configuration detected, skipping amazon registration...")
             self.aws_proxy = None
 
         self.add_handler(EventType.RFID_DETECTED, rfid_detected_handler)

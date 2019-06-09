@@ -4,8 +4,8 @@ from core import log
 from core.events import create_event, EventType, EventKey
 from scale.hx711.hx711 import HX711
 
-DOUT = 20
-SCK = 21
+# DOUT = 20
+# SCK = 21
 UNIT_SCALE = 730
 
 
@@ -21,7 +21,7 @@ class FakeScale:
 
 
 class Scale:
-    def __init__(self):
+    def __init__(self, DOUT, SCK):
         self.hx = HX711(DOUT, SCK)
         self.hx.set_reading_format("MSB", "MSB")
         self.hx.set_reference_unit(UNIT_SCALE)
