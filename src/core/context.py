@@ -1,5 +1,6 @@
 from queue import Queue
 
+from core import log
 from core.database import Database
 from gui.gui import GuiProxy
 from relay.relay import RelayBoard
@@ -47,3 +48,13 @@ class Context:
 
         self.recipes = dict()
         self.initialize()
+
+    def add_recipe(self, recipe):
+        for step in recipe.steps:
+            tap = step[0]
+            if tap not in self.relay_board.relays:
+                log.error("error adding recipe " + recipe.name + ": unknown tap \"" + tap + "\"")
+                return False
+
+        self.recipes[recipe.name] = recipe
+        return True

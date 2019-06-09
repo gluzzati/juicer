@@ -93,7 +93,9 @@ def new_recipe_handler(ctx, evt):
     recipe = Recipe()
     recipe.name = recipedict[Recipe.Key.name]
     recipe.steps = recipedict[Recipe.Key.steps]
-    recipe.taps = recipedict[Recipe.Key.taps]
-    ctx.recipes[recipe.name] = recipe
-    log.ok("added recipe \"" + recipe.name + "\"")
-    return True, ctx.state
+    ok = ctx.add_recipe(recipe)
+    if ok:
+        log.ok("added recipe \"" + recipe.name + "\"")
+        return True, ctx.state
+    else:
+        return False, ctx.state
