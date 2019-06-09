@@ -8,11 +8,11 @@ from queue import Queue
 import yaml
 
 from core.event_handlers import *
-from core.faucet import Faucet, Recipe
 from core.reactor import Reactor
+from core.recipe import Recipe
 from core.user import User
 from gui.gui import GuiProxy
-from relay.relay import Relay, RelayBoard
+from relay.relay import Relay
 from rfid.rfid import RFID
 from scale.scale import FakeScale
 
@@ -81,7 +81,7 @@ def send_wrong_type(queue):
 
 
 def send_register(queue):
-    evt = create_event(EventType.REGISTRATION_REQUESTED)
+    evt = create_event(EventType.NEW_USER)
     giulio = User()
     giulio.name = "Giulio"
     giulio.tag = 797313096147
@@ -186,18 +186,6 @@ class FakeFM:
         return int(time.time() - self.start)
 
 
-def faucet_test():
-    fm = FakeFM()
-    relay_board = RelayBoard([
-        ["water", 2],
-        ["orange", 3],
-    ], fm)
-    faucet = Faucet(relay_board)
-    r = parse_testrecipe("test_resources/orangejuice.yml")
-    faucet.dispense(r)
-    pass
-
-
 def parse_testrecipe(file):
     r = Recipe()
     with open(file, "r") as stream:
@@ -215,7 +203,7 @@ def recipes_test():
         r = parse_testrecipe("test_resources/malformed3.yml")
         r = parse_testrecipe("test_resources/malformed4.yml")
         r = parse_testrecipe("test_resources/malformed5.yml")
-        r = parse_testrecipe("test_resources/orangejuice.yml")
+        r = parse_testrecipe("test_resources/recipes.yml")
         for tap, amount in r.steps:
             log.yay("{}[{}] - {}cc".format(tap, r.taps[tap], amount))
 
@@ -233,8 +221,7 @@ if __name__ == "__main__":
     parser.add_argument('--allio', help='perform all sensors/io tests', action='store_true')
     parser.add_argument('--all', help='perform all tests', action='store_true')
     parser.add_argument('--core', help='perform core test', action='store_true')
-parser.add_argument('--faucet', help='perform faucet test', action='store_true')
-parser.add_argument('--recipes', help='perform recipes test', action='store_true')
+    parser.add_argument('--recipes', help='perform recipes test', action='store_true')
 
 args = parser.parse_args()
 if len(sys.argv) == 1:
@@ -246,9 +233,7 @@ if args.rfid or args.all or args.allio:
     rfid_test()
 if args.relay or args.all or args.allio:
     relay_test()
-if args.faucet or args.all:
-    faucet_test()
-    if args.core or args.all:
+if args.core or args.all:
         core_test()
 if args.recipes or args.all:
     recipes_test()

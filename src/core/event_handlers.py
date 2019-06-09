@@ -1,6 +1,7 @@
 from core import log
 from core.context import Context
 from core.events import EventType, create_event, EventKey
+from core.recipe import Recipe
 from core.user import User, Glass
 
 
@@ -55,7 +56,7 @@ def auto_wateroff_handler(ctx, evt):
     return True, next_state
 
 
-def registration_requested_handler(ctx, evt):
+def new_user_handler(ctx, evt):
     userdict = evt[EventKey.user]
     user = User()
     user.name = userdict[User.Key.name]
@@ -68,6 +69,7 @@ def registration_requested_handler(ctx, evt):
     if exists:
         log.warn("user \"{}\" already exists in db - updating records".format(user.name))
     ctx.database.add(user)
+    log.ok("added user " + user.name)
     return True, ctx.state
 
 
@@ -76,9 +78,22 @@ def pour_requested_handler(ctx, evt):
         recipe_name = evt[EventKey.requested_recipe]
         if recipe_name in ctx.recipes:
             ctx.requested_recipe = ctx.recipes[recipe_name]
+            log.info("requested \"" + recipe_name + "\" recipe")
             return True, Context.State.POURING
         else:
+            log.error("unknown recipe \"" + recipe_name + "\"")
             return False, ctx.state
     else:
         log.info("NO GLASS - POUR button press ignored")
         return True, ctx.state
+
+
+def new_recipe_handler(ctx, evt):
+    recipedict = evt[EventKey.add_recipe]
+    recipe = Recipe()
+    recipe.name = recipedict[Recipe.Key.name]
+    recipe.steps = recipedict[Recipe.Key.steps]
+    recipe.taps = recipedict[Recipe.Key.taps]
+    ctx.recipes[recipe.name] = recipe
+    log.ok("added recipe \"" + recipe.name + "\"")
+    return True, ctx.state

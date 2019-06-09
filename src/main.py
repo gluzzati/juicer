@@ -7,7 +7,31 @@ from core import log
 from core.context import Context
 from core.events import create_event, EventType, EventKey, json2evt, evt2json
 from core.reactor import ReactorThread
+from core.recipe import parse_recipes_list_file
+from core.user import parse_user_list_file
 from rfid.rfid import RfidThread
+
+
+def parse_users(ctx):
+    ok, users = parse_user_list_file("resources/users.yml")
+    if ok:
+        log.ok("found " + str(len(users)) + " users")
+        for user in users:
+            evt = create_event(EventType.NEW_USER)
+            evt[EventKey.user] = user
+            _, evt = json2evt(evt2json(evt))
+            ctx.queue.put(evt)
+
+
+def parse_recipes(ctx):
+    ok, recipes = parse_recipes_list_file("resources/recipes.yml")
+    if ok:
+        log.ok("found " + str(len(recipes)) + " recipes")
+        for recipe in recipes:
+            evt = create_event(EventType.NEW_RECIPE)
+            evt[EventKey.add_recipe] = recipe
+            _, evt = json2evt(evt2json(evt))
+            ctx.queue.put(evt)
 
 
 def main(args):
@@ -15,17 +39,8 @@ def main(args):
 
     context = Context(args)
 
-    # todo delete
-    from core.user import User
-    giulio = User()
-    giulio.name = "Giulio"
-    giulio.tag = 797313096147
-    giulio.glass.capacity = 250
-    giulio.glass.weight = 280
-    evt = create_event(EventType.REGISTRATION_REQUESTED)
-    evt[EventKey.user] = giulio
-    _, evt = json2evt(evt2json(evt))
-    context.queue.put(evt)
+    parse_users(context)
+    parse_recipes(context)
 
     core_th = ReactorThread(context)
     rfid_th = RfidThread(context.queue)

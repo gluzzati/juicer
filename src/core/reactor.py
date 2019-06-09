@@ -42,9 +42,11 @@ class Reactor:
 
         self.add_handler(EventType.RFID_DETECTED, rfid_detected_handler)
         self.add_handler(EventType.RFID_REMOVED, rfid_removed_handler)
-        self.add_handler(EventType.REGISTRATION_REQUESTED, registration_requested_handler)
+        self.add_handler(EventType.NEW_USER, new_user_handler)
         self.add_handler(EventType.AUTO_WATEROFF, auto_wateroff_handler)
         self.add_handler(EventType.POUR_REQUESTED, pour_requested_handler)
+        self.add_handler(EventType.NEW_RECIPE, new_recipe_handler)
+
 
         self.add_statecallback(Context.State.IDLE, on_idle)
         self.add_statecallback(Context.State.GLASS_ON, on_glass_on)

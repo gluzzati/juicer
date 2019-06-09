@@ -1,23 +1,9 @@
-import glob
 from queue import Queue
 
-from core import log
 from core.database import Database
-from core.faucet import Faucet, parse_recipe_file
 from gui.gui import GuiProxy
 from relay.relay import RelayBoard
 from scale.scale import Scale
-
-
-def parse_recipes():
-    recipes = dict()
-    for file in glob.glob("recipes/*.yml"):
-        ok, r = parse_recipe_file(file)
-        if ok:
-            recipes[r.name] = r
-            log.ok("found recipe \"{}\"".format(r.name))
-
-    return recipes
 
 
 class Context:
@@ -59,7 +45,5 @@ class Context:
             ["orange", 3],
         ])
 
-        self.faucet = Faucet(self.relay_board)
-        self.recipes = parse_recipes()
-
+        self.recipes = dict()
         self.initialize()

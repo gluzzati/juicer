@@ -1,0 +1,24 @@
+recipes:
+  - orange_juice:
+      steps:
+        - [water, 3]
+        - [orange, 2]
+        - [water, 3]
+      taps:
+        water: 1
+        orange: 2
+
+  - still water:
+      steps:
+        - [water, 5]
+      taps:
+        water: 1
+
+  - blackcurrant:
+      steps:
+        - [water, 3]
+        - [blackcurrant, 2]
+        - [water, 3]
+      taps:
+        water: 1
+        blackcurrant: 3

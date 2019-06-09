@@ -14,6 +14,7 @@ class EventKey:
     rfid = "rfid"
     cause = "cause"
     requested_recipe = "requested_recipe"
+    add_recipe = "add_recipe"
 
 
 RequiredEventKeys = [EventKey.timestamp, EventKey.type]
@@ -36,9 +37,9 @@ class EventType:
     RFID_DETECTED = "RFID_DETECTED"
     RFID_REMOVED = "RFID_REMOVED"
     WEIGHT_MEASURE = "WEIGHT_MEASURE"
-    REGISTRATION_REQUESTED = "REGISTRATION_REQUESTED"
+    NEW_USER = "NEW_USER"
     AUTO_WATEROFF = "AUTO_WATEROFF"
-    ADD_RECIPE = "ADD_RECIPE"
+    NEW_RECIPE = "NEW_RECIPE"
     POUR_REQUESTED = "POUR_REQUESTED"
     INVALID = "INVALID"
 

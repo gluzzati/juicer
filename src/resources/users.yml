@@ -1,0 +1,48 @@
+users:
+  - name: Adam
+    tag: 797313096147
+    glass:
+      capacity: 245
+      weight: 365
+
+  - name: Barry
+    tag: 323984762367
+    glass:
+      capacity: 245
+      weight: 365
+
+  - name: Carl
+    tag: 584198996276
+    glass:
+      capacity: 245
+      weight: 365
+
+  - name: Anna
+    tag: 584191005345
+    glass:
+      capacity: 245
+      weight: 365
+
+  - name: Bernadette
+    tag: 584198867760
+    glass:
+      capacity: 245
+      weight: 365
+
+  - name: Cecilia
+    tag: 584187007134
+    glass:
+      capacity: 245
+      weight: 365
+
+  - name: Delilah
+    tag: 584189887911
+    glass:
+      capacity: 245
+      weight: 365
+
+  - name: Elena
+    tag: 584194602765
+    glass:
+      capacity: 245
+      weight: 365
