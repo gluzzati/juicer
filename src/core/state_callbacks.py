@@ -5,18 +5,43 @@ from core import log
 from core.context import Context
 from core.events import EventType, create_event, EventKey
 
-SAFETY_TIMEOUT = 5
+SAFETY_TIMEOUT = 60
 GUARD = 0.9
 INFINITY = float('inf')
 
 
-class Safety(Thread):
-    def __init__(self, relay, scale, max, queue):
-        self.relay = relay
+class DispenseThread(Thread):
+    def __init__(self, ctx):
+        self.relay_board = ctx.relay_board
+        self.recipe = ctx.requested_recipe
+        self.ctx = ctx
+        super().__init__()
+        self.name = "dispense"
+
+    def run(self):
+        DT = 0.1
+        elapsed = 0
+        for tap, amount in self.recipe.steps:
+            while self.ctx.state == Context.State.POURING:
+                self.relay_board.open(tap)
+                time.sleep(DT)
+                elapsed += DT
+                if elapsed >= amount or not self.relay_board.pouring():
+                    break
+            self.relay_board.close(tap)
+            elapsed = 0
+
+        pass
+
+
+class SafetyThread(Thread):
+    def __init__(self, relay_board, scale, max, queue):
+        self.relay_board = relay_board
         self.scale = scale
         self.max = max
         self.queue = queue
         super().__init__()
+        self.name = "safety"
 
     def glass_percent(self):
         weight = self.scale.get_weight()
@@ -30,12 +55,15 @@ class Safety(Thread):
     def run(self):
         elapsed = 0
         DT = 0.1
-        while elapsed < SAFETY_TIMEOUT and self.relay.pouring and not self.glass_full():
+
+        while elapsed < SAFETY_TIMEOUT and not self.glass_full():
             time.sleep(DT)
             elapsed += DT
+            if not self.relay_board.pouring():
+                break
 
-        if self.relay.pouring:
-            self.relay.water_off()
+        if self.relay_board.pouring():
+            self.relay_board.shut_all()
             evt = create_event(EventType.AUTO_WATEROFF)
             evt[EventKey.cause] = None
             log.warn("auto off")
@@ -70,10 +98,11 @@ def on_pouring(ctx):
         max = INFINITY
 
     if ctx.onscale < max:
-        timer = Safety(ctx.relay, ctx.scale, max, ctx.queue)
+        safety_th = SafetyThread(ctx.relay_board, ctx.scale, max, ctx.queue)
+        dispenser_th = DispenseThread(ctx)
         ctx.state = Context.State.POURING
-        ctx.relay.water_on()
-        timer.start()
+        dispenser_th.start()
+        safety_th.start()
         return True, None
     else:
         log.warn("glass already full")

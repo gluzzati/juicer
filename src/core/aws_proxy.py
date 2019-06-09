@@ -34,7 +34,7 @@ class AWSProxy:
             log.warn("I have no recollection of message {} you're trying to ack..".format(mid))
 
     def __ack_subscribe(self, mid, data):
-        log.yay("aws subscribe ack: granted QoS " + str(data[0]))
+        log.ok("aws subscribe ack: granted QoS " + str(data[0]))
         self.subscribed = True
 
     def __on_remote_pub(self, client, userdata, message):

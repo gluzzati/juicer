@@ -1,13 +1,23 @@
-import os
+import glob
 from queue import Queue
 
+from core import log
 from core.database import Database
-from flow_meter.flowmeter import FlowMeter
+from core.faucet import Faucet, parse_recipe_file
 from gui.gui import GuiProxy
-from relay.relay import Relay
+from relay.relay import RelayBoard
 from scale.scale import Scale
 
-CWD = os.getcwd() + "/"
+
+def parse_recipes():
+    recipes = dict()
+    for file in glob.glob("recipes/*.yml"):
+        ok, r = parse_recipe_file(file)
+        if ok:
+            recipes[r.name] = r
+            log.ok("found recipe \"{}\"".format(r.name))
+
+    return recipes
 
 
 class Context:
@@ -40,10 +50,16 @@ class Context:
         self.gui = GuiProxy()
         self.database = Database()
         self.user = None
-
         self.scale = Scale()
         self.queue = Queue()
+
+        # todo: dehardcode gpio pins to config file!
+        self.relay_board = RelayBoard([
+            ["water", 2],
+            ["orange", 3],
+        ])
+
+        self.faucet = Faucet(self.relay_board)
+        self.recipes = parse_recipes()
+
         self.initialize()
-        self.flowmeter = FlowMeter(18, 4.25)  # todo dehardcode pins
-        self.relay = Relay(self.flowmeter)
-        self.relay.set_pourer(2)

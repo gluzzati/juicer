@@ -26,6 +26,7 @@ def rfid_detected_handler(ctx, evt):
 
         # todo delete this
         evt = create_event(EventType.POUR_REQUESTED)
+        evt[EventKey.requested_recipe] = "orange_juice"
         ctx.queue.put(evt)
     else:
         ctx.gui.update("Hi stranger! want to register?")
@@ -38,7 +39,7 @@ def rfid_removed_handler(ctx, evt):
     next_state = ctx.state
     if ctx.state in (Context.State.GLASS_ON, Context.State.POURING):
         if ctx.state == Context.State.POURING:
-            ctx.relay.water_off()  # emergency wateroff, bypasses normal procedure
+            ctx.relay_board.shut_all()  # emergency wateroff, bypasses normal procedure
         next_state = Context.State.IDLE
     else:
         log.debug("removed rfid, but there was no glass, mumble mumble... " + ctx.state)
@@ -72,7 +73,12 @@ def registration_requested_handler(ctx, evt):
 
 def pour_requested_handler(ctx, evt):
     if ctx.state is Context.State.GLASS_ON:
-        return True, Context.State.POURING
+        recipe_name = evt[EventKey.requested_recipe]
+        if recipe_name in ctx.recipes:
+            ctx.requested_recipe = ctx.recipes[recipe_name]
+            return True, Context.State.POURING
+        else:
+            return False, ctx.state
     else:
         log.info("NO GLASS - POUR button press ignored")
         return True, ctx.state

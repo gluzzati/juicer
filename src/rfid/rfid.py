@@ -41,6 +41,7 @@ class RfidThread(Thread):
         self.queue = queue
         self.tag_present = False
         self.current_tag = None
+
         super().__init__()
 
     def dispatch(self, evt):
