@@ -4,10 +4,6 @@ from core import log
 from core.events import create_event, EventType, EventKey
 from scale.hx711.hx711 import HX711
 
-# DOUT = 20
-# SCK = 21
-UNIT_SCALE = 730
-
 
 class FakeScale:
     def __init__(self):
@@ -25,9 +21,10 @@ class Scale:
         scale_cfg = config["scale"]
         DOUT = int(scale_cfg["DOUT"])
         SCK = int(scale_cfg["SCK"])
+        SCALE_CONSTANT = int(scale_cfg["conversion_constant"])
         self.hx = HX711(DOUT, SCK)
         self.hx.set_reading_format("MSB", "MSB")
-        self.hx.set_reference_unit(UNIT_SCALE)
+        self.hx.set_reference_unit(SCALE_CONSTANT)
         self.reset_and_tare()
         self.init = True
 
