@@ -53,6 +53,11 @@ R1   - 3
 R2   - 5
 R... - choose a free gpio
 
+FLOW METER:
+==============================
+red    - 3.3V or 5V w 2-3.5K resistor
+black  - GND
+yellow - 15
 
 
 STRAINGAUGE READER TO LOAD CELL:
