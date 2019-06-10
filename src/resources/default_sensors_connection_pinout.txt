@@ -1,0 +1,39 @@
+Notation:
+[SENSOR pin] - [RASPI pin]
+
+
+NFC READER:
+==============================
+SDA  - CE0
+SCK  - SCLK
+MOSI - MOSI
+MISO - MISO
+IRQ  - not connected
+GND  - GND
+RST  - #25
+3.3v - 3v3
+
+STRAIN GAUGE:
+==============================
+GND  - GND
+DT   - #20
+SCK  - #21
+VCC  - 5.0V
+
+RELAY BOARD:
+==============================
+5V   - 5.0V
+GND  - GND
+R1   - SDA
+R2   - SCL
+R... - choose a fre gpio
+
+
+
+STRAINGAUGE READER TO LOAD CELL:
+===============================
+
+red   - E+
+black - E-
+white - A-
+green - A+
