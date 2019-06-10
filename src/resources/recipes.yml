@@ -1,13 +1,13 @@
 recipes:
   - name: orange_juice
     steps:
-      - [water, 3]
-      - [orange, 2]
-      - [water, 3]
+      - [water, 100]
+      - [orange, 30]
+      - [water, 50]
 
   - name: water
     steps:
-      - [water, 3]
+      - [water, 180]
 
 #  - name: blackcurrant
 #    steps:

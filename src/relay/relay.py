@@ -35,7 +35,12 @@ class Relay:
 
 
 class RelayBoard:
-    def __init__(self, relaylist):
+    def __init__(self, config):
+        relaylist = list()
+        relay_board_cfg = config["relay_board"]
+        for tap in relay_board_cfg:
+            relaylist.append([tap, int(relay_board_cfg[tap])])
+
         self.relays = dict()
         for name, pin in relaylist:
             self.relays[name] = Relay(pin)

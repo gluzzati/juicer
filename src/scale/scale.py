@@ -21,7 +21,10 @@ class FakeScale:
 
 
 class Scale:
-    def __init__(self, DOUT, SCK):
+    def __init__(self, config):
+        scale_cfg = config["scale"]
+        DOUT = int(scale_cfg["DOUT"])
+        SCK = int(scale_cfg["SCK"])
         self.hx = HX711(DOUT, SCK)
         self.hx.set_reading_format("MSB", "MSB")
         self.hx.set_reference_unit(UNIT_SCALE)

@@ -20,18 +20,20 @@ class DispenseThread(Thread):
 
     def run(self):
         DT = 0.1
-        elapsed = 0
+        total_poured = 0
+        self.ctx.flowmeter.enable()
         for tap, amount in self.recipe.steps:
+            log.debug("pouring " + tap)
+            self.ctx.flowmeter.reset()
             while self.ctx.state == Context.State.POURING:
                 self.relay_board.open(tap)
                 time.sleep(DT)
-                elapsed += DT
-                if elapsed >= amount or not self.relay_board.pouring():
+                if self.ctx.flowmeter.poured_ccs() >= amount or not self.relay_board.pouring():
                     break
             self.relay_board.close(tap)
-            elapsed = 0
-
-        pass
+            total_poured += self.ctx.flowmeter.poured_ccs()
+        self.ctx.flowmeter.disable()
+        log.info("poured " + str(total_poured) + " CCs")
 
 
 class SafetyThread(Thread):
@@ -46,7 +48,7 @@ class SafetyThread(Thread):
     def glass_percent(self):
         weight = self.scale.get_weight()
         percent = weight / self.max * 100
-        log.debug("{}% full".format(percent))
+        # log.debug("{}% full".format(percent))
         return percent
 
     def glass_full(self):

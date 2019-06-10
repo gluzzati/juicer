@@ -2,6 +2,7 @@ from queue import Queue
 
 from core import log
 from core.database import Database
+from flow_meter.flowmeter import FlowMeter
 from gui.gui import GuiProxy
 from relay.relay import RelayBoard
 from scale.scale import Scale
@@ -36,20 +37,12 @@ class Context:
         self.state = Context.State.UNINIT
         self.gui = GuiProxy()
         self.database = Database()
+        self.queue = Queue()
         self.user = None
 
-        scale_cfg = config["scale"]
-        DOUT = int(scale_cfg["DOUT"])
-        SCK = int(scale_cfg["SCK"])
-        self.scale = Scale(DOUT, SCK)
-        self.queue = Queue()
-
-        taps = list()
-        relay_board_cfg = config["relay_board"]
-        for tap in relay_board_cfg:
-            taps.append([tap, int(relay_board_cfg[tap])])
-
-        self.relay_board = RelayBoard(taps)
+        self.scale = Scale(config)
+        self.relay_board = RelayBoard(config)
+        self.flowmeter = FlowMeter(config)
 
         self.recipes = dict()
         self.initialize()

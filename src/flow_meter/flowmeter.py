@@ -4,7 +4,10 @@ from core import log
 
 
 class FlowMeter:
-    def __init__(self, GPIO_PIN, pulses_per_cc=4.25):
+    def __init__(self, config):
+        flowmeter_cfg = config["flowmeter"]
+        GPIO_PIN = int(flowmeter_cfg["GPIO_PIN"])
+        pulses_per_cc = float(flowmeter_cfg["pulses_per_cc"])
         self.pulse_count = 0
         self.tared = True
         self.tcc = pulses_per_cc
@@ -26,8 +29,8 @@ class FlowMeter:
 
     def increment(self, channel):
         self.pulse_count += 1
-        log.ok("count: " + str(self.pulse_count))
-        log.ok("poured {} ccs".format(self.poured_ccs()))
+        # log.ok("count: " + str(self.pulse_count))
+        # log.ok("poured {} ccs".format(self.poured_ccs()))
 
     def poured_ccs(self):
         if self.tared:
