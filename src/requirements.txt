@@ -1,0 +1,5 @@
+AWSIoTPythonSDK==1.4.6
+pkg-resources==0.0.0
+PyYAML==5.1.1
+RPi.GPIO==0.6.5
+spidev==3.4

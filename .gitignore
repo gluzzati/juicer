@@ -2,3 +2,4 @@ __pycache*
 *.pyc
 .idea
 pipe
+venv
