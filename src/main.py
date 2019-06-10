@@ -1,6 +1,7 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 import argparse
 import configparser
+import os
 
 from RPi import GPIO
 
@@ -11,6 +12,10 @@ from core.reactor import ReactorThread
 from core.recipe import parse_recipes_list_file
 from core.user import parse_user_list_file
 from rfid.rfid import RfidThread
+
+abspath = os.path.abspath(__file__)
+dname = os.path.dirname(abspath)
+os.chdir(dname)
 
 
 def parse_users(ctx, file):

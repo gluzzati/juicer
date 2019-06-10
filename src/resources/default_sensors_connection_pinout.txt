@@ -1,6 +1,3 @@
-Notation:
-[SENSOR pin] - [RASPI pin]
-
 RASPBERRY PI PINOUT for reference
 ===============================
 
@@ -27,6 +24,8 @@ GPIO26 (37) (38) GPIO20
 
 
 
+Notation:
+[SENSOR pin] - [RASPI pin]
 
 NFC READER:
 ==============================
@@ -52,7 +51,7 @@ RELAY BOARD:
 GND  - GND
 R1   - 3
 R2   - 5
-R... - choose a fre gpio
+R... - choose a free gpio
 
 
 
