@@ -1,16 +1,16 @@
 recipes:
-  - orange_juice:
-      steps:
-        - [water, 3]
-        - [orange, 2]
-        - [water, 3]
+  - name: orange_juice
+    steps:
+      - [water, 3]
+      - [orange, 2]
+      - [water, 3]
 
-  - still water:
-      steps:
-        - [water, 5]
+  - name: water
+    steps:
+      - [water, 3]
 
-#  - blackcurrant:
-#      steps:
-#        - [water, 3]
-#        - [blackcurrant, 2]
-#        - [water, 3]
+#  - name: blackcurrant
+#    steps:
+#      - [water, 3]
+#      - [blackcurrant, 2]
+#      - [water, 3]

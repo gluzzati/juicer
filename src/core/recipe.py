@@ -11,14 +11,13 @@ def parse_one_recipe(yml):
         log.error(tag + "not a valid recipe format " + str(type(yml)))
         return False, None
 
-    recipe_name = list(yml)[0]
     for field in REQUIRED_FIELDS:
-        if field not in yml[recipe_name]:
+        if field not in yml:
             log.error(tag + "missing field " + field)
             return False, None
 
-    recipe = yml[recipe_name]
-    steps = recipe["steps"]
+    recipe_name = yml["name"]
+    steps = yml["steps"]
 
     for i, step in enumerate(steps):
         tap = step[0]
