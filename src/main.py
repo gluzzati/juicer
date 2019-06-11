@@ -41,11 +41,12 @@ def parse_recipes(ctx, file):
 
 
 def main(args):
-    log.loglevel = log.LVL_DBG
 
     conf = configparser.ConfigParser()
     conf.read("resources/config.ini")
     context = Context(conf)
+
+    log.loglevel = log.logleveldict[conf["log"]["level"]]
 
     parse_users(context, conf["users"]["file"])
     parse_recipes(context, conf["recipes"]["file"])

@@ -50,6 +50,14 @@ LVL_YAY = LVL_INFO
 LVL_WARN = 2
 LVL_ERROR = 10
 
+logleveldict = {
+    "debug": LVL_DBG,
+    "ok": LVL_OK,
+    "info": LVL_INFO,
+    "warning": LVL_WARN,
+    "error": LVL_ERROR,
+}
+
 loglevel = LVL_INFO
 
 
