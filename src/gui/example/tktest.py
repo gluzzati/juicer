@@ -24,9 +24,8 @@ def realize(master, element):
 		return widget_factory(master, **options)
 
 
-def printcazzo():
-	log.yay("CAZZO!!")
-	print("merda")
+def print_test():
+	log.yay("test!!")
 
 
 class FullScreenApp(object):
@@ -36,7 +35,7 @@ class FullScreenApp(object):
 		master.overrideredirect(True)
 		root.resizable(width=False, height=False)
 		self.frame = realize(root, kwargs["xml"])
-		self.printcazzo = printcazzo
+		self.print_test = print_test
 		self.frame.pack()
 
 
@@ -45,7 +44,7 @@ form = XML("""\
     <label><text>entry:</text></label>
     <entry width='30' bg='gold' />
     <checkbutton><text>checkbutton</text></checkbutton>
-    <button text='OK' relief='flat'  activebackground='gold' command='printcazzo' highlightthickness='0' borderwidth='0' />
+    <button text='OK' relief='flat'  activebackground='gold' command='print_test' highlightthickness='0' borderwidth='0' />
     <button text='Cancel' />
 </form>
 """)

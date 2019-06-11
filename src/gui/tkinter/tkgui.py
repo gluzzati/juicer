@@ -8,8 +8,8 @@ def fullscreen(root):
 
 class Fakeclass:
     @staticmethod
-    def printcazzo(cb, event=None):
-        print("CAZZO!")
+    def print_test(cb, event=None):
+        print("test!")
 
 
 if __name__ == '__main__':
@@ -24,8 +24,8 @@ if __name__ == '__main__':
         root.destroy()
 
 
-    def printcazzo2(event=None):
-        print("CAZZO2!")
+    def print_test2(event=None):
+        print("test2!")
 
 
     # config vars for checkboxes etc.
@@ -35,5 +35,5 @@ if __name__ == '__main__':
     # add button behaviour
     root.button('ok', ok)
     root.button('cancel', root.destroy)
-    root.checkbox('check', Fakeclass.printcazzo)
+    root.checkbox('check', Fakeclass.print_test)
     root.mainloop()
