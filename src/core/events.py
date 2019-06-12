@@ -42,6 +42,7 @@ class EventType:
     NEW_RECIPE = "NEW_RECIPE"
     POUR_REQUESTED = "POUR_REQUESTED"
     INVALID = "INVALID"
+    POUR_COMPLETED = "POUR_COMPLETED"
 
 
 def create_event(type):

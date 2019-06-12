@@ -34,6 +34,11 @@ class DispenseThread(Thread):
             total_poured += self.ctx.flowmeter.poured_ccs()
         self.ctx.flowmeter.disable()
         log.info("poured " + str(total_poured) + " CCs")
+        evt = create_event(EventType.POUR_COMPLETED)
+        evt["recipe"] = self.recipe
+        evt["total_poured"] = total_poured
+        self.ctx.queue.put(evt)
+
 
 
 class SafetyThread(Thread):
