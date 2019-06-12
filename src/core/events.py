@@ -25,8 +25,8 @@ def validate(evt):
         if key not in evt:
             return False
 
-    if type(evt[EventKey.timestamp]) is not float:
-        return False
+        # if type(evt[EventKey.timestamp]) is not (float or int):
+        #     return False
 
     return True
 
