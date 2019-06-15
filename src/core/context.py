@@ -49,7 +49,7 @@ class Context:
 
     def add_recipe(self, recipe):
         for step in recipe.steps:
-            tap = step[0]
+            tap = step
             if tap not in self.relay_board.relays:
                 log.error("error adding recipe " + recipe.name + ": unknown tap \"" + tap + "\"")
                 return False

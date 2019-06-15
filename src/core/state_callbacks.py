@@ -10,6 +10,28 @@ GUARD = 0.9
 INFINITY = float('inf')
 
 
+def tap_is_on(tap, elapsed, recipe):
+    if not tap in recipe.steps:
+        log.error("tap not in recipe!")
+        return False
+    else:
+        start = recipe.steps[tap][0]
+        duration = recipe.steps[tap][1]
+        end = start + duration
+        return start < elapsed < end
+    pass
+
+
+def total(recipe):
+    tot = 0
+    for tap in recipe.steps:
+        start = recipe.steps[tap][0]
+        duration = recipe.steps[tap][1]
+        end = start + duration
+        tot = max(tot, end)
+
+    return tot
+
 class DispenseThread(Thread):
     def __init__(self, ctx):
         self.relay_board = ctx.relay_board
@@ -21,18 +43,26 @@ class DispenseThread(Thread):
     def run(self):
         DT = 0.1
         total_poured = 0
-        self.ctx.flowmeter.enable()
-        for tap, amount in self.recipe.steps:
-            log.debug("pouring " + tap)
-            self.ctx.flowmeter.reset()
-            while self.ctx.state == Context.State.POURING:
-                self.relay_board.open(tap)
-                time.sleep(DT)
-                if self.ctx.flowmeter.poured_ccs() >= amount or not self.relay_board.pouring():
-                    break
-            self.relay_board.close(tap)
-            total_poured += self.ctx.flowmeter.poured_ccs()
-        self.ctx.flowmeter.disable()
+        start = time.time()
+        elapsed = 0
+
+        while self.ctx.state == Context.State.POURING:
+            time.sleep(DT)
+            elapsed = time.time() - start
+            log.info("elapsed: " + str(elapsed))
+
+            for tap in self.recipe.steps:
+                if tap_is_on(tap, elapsed, self.recipe):
+                    self.relay_board.open(tap)
+                else:
+                    self.relay_board.close(tap)
+                if elapsed > total(self.recipe) or not self.relay_board.pouring():
+                    self.relay_board.shut_all()
+
+            if elapsed > total(self.recipe) or not self.relay_board.pouring():
+                self.relay_board.shut_all()
+                break
+
         log.info("poured " + str(total_poured) + " CCs")
         evt = create_event(EventType.POUR_COMPLETED)
         evt["recipe"] = self.recipe

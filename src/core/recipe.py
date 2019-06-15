@@ -22,9 +22,9 @@ def parse_one_recipe(yml):
     for i, step in enumerate(steps):
         tap = step[0]
         amount = step[1]
-        if not (isinstance(amount, float) or isinstance(amount, int)):
-            log.error("error parsing step {}: expecting number - got {}".format(i + 1, str(type(amount))))
-            return False, None
+        # if not (isinstance(amount, float) or isinstance(amount, int)):
+        #     log.error("error parsing step {}: expecting number - got {}".format(i + 1, str(type(amount))))
+        #     return False, None
 
     out = Recipe()
     out.name = recipe_name
