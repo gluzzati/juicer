@@ -50,7 +50,6 @@ class DispenseThread(Thread):
         while self.ctx.state == Context.State.POURING:
             time.sleep(DT)
             elapsed = time.time() - start
-            log.info("elapsed: " + str(elapsed))
 
             for tap in self.recipe.steps:
                 if tap_is_on(tap, elapsed, self.recipe):

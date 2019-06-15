@@ -21,7 +21,14 @@ recipes:
       still_water: [6, 5]
       elderflower: [7, 2.5]
 
+  - name: water_still
+    steps:
+      still_water: [0, 11]
 
+  - name: water_sparkling
+    steps:
+      sparkling_water: [0, 7.5]
+      still_water: [7, 4]
 
 #  - name: water
 #    steps:
