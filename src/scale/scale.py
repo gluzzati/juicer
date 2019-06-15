@@ -2,7 +2,6 @@ from threading import Thread
 
 from core import log
 from core.events import create_event, EventType, EventKey
-from scale.hx711.hx711 import HX711
 
 
 class FakeScale:
@@ -22,20 +21,21 @@ class Scale:
         DOUT = int(scale_cfg["DOUT"])
         SCK = int(scale_cfg["SCK"])
         SCALE_CONSTANT = int(scale_cfg["conversion_constant"])
-        self.hx = HX711(DOUT, SCK)
-        self.hx.set_reading_format("MSB", "MSB")
-        self.hx.set_reference_unit(SCALE_CONSTANT)
-        self.reset_and_tare()
+        # self.hx = HX711(DOUT, SCK)
+        # self.hx.set_reading_format("MSB", "MSB")
+        # self.hx.set_reference_unit(SCALE_CONSTANT)
+        # self.reset_and_tare()
         self.init = True
 
     def reset_and_tare(self):
-        self.hx.reset()
-        log.debug("taring scale... ")
-        self.hx.tare()
+        # self.hx.reset()
+        # log.debug("taring scale... ")
+        # self.hx.tare()
         log.debug("tare complete, scale ready")
 
     def get_weight(self):
-        return self.hx.get_weight(1)
+        return 0
+        # return self.hx.get_weight(1)
 
 
 def request_weight_measure(scale, queue):
