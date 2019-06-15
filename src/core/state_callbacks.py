@@ -45,6 +45,7 @@ class DispenseThread(Thread):
         total_poured = 0
         start = time.time()
         elapsed = 0
+        log.info("requested " + self.recipe.name)
 
         while self.ctx.state == Context.State.POURING:
             time.sleep(DT)

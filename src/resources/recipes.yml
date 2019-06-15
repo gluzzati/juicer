@@ -1,9 +1,27 @@
 recipes:
-  - name: orange_juice
+  - name: raspberry_still
+    steps:
+      still_water: [0, 11]
+      raspberry: [2, 2.5]
+
+  - name: raspberry_sparkling
     steps:
       sparkling_water: [0, 6]
-      still_water: [5, 6]
-      orange: [6.5, 2.5]
+      still_water: [6, 5]
+      raspberry: [7, 2.5]
+
+  - name: elderflower_still
+    steps:
+      still_water: [0, 11]
+      elderflower: [2, 2.5]
+
+  - name: elderflower_sparkling
+    steps:
+      sparkling_water: [0, 6]
+      still_water: [6, 5]
+      elderflower: [7, 2.5]
+
+
 
 #  - name: water
 #    steps:
