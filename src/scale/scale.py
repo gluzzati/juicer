@@ -33,6 +33,8 @@ class Scale:
         log.debug("taring scale... ")
         self.hx.tare()
         log.debug("tare complete, scale ready")
+        while True:
+            log.yay("weight: " + str(self.hx.get_weight()))
 
     def get_weight(self):
         return self.hx.get_weight(1)
