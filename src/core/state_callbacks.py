@@ -45,11 +45,11 @@ class DispenseThread(Thread):
         total_poured = 0
         start = time.time()
         elapsed = 0
-        log.info("requested " + self.recipe.name)
 
         while self.ctx.state == Context.State.POURING:
             time.sleep(DT)
             elapsed = time.time() - start
+            # log.info("elapsed: " + str(elapsed))
 
             for tap in self.recipe.steps:
                 if tap_is_on(tap, elapsed, self.recipe):
@@ -83,7 +83,7 @@ class SafetyThread(Thread):
     def glass_percent(self):
         weight = self.scale.get_weight()
         percent = weight / self.max * 100
-        # log.debug("{}% full".format(percent))
+        # log.dbg("{}% full".format(percent))
         return percent
 
     def glass_full(self):

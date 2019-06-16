@@ -76,7 +76,7 @@ class Reactor:
             return self.callbacks[next_state](self.ctx)
         else:
             log.error("unknown state " + str(next_state))
-            return False, None
+            return False, self.ctx.state
 
     def run(self):
         while self.ctx.running:

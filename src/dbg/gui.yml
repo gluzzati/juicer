@@ -1,0 +1,63 @@
+LabelFrame:
+  text: Juicer tester
+  weight: 1
+  column: 0
+  columnspan: 3
+  row: 0
+  Button:
+    name: glasson
+    text: Toggle Bottle on
+    column: 0
+    row: 0
+    command: on_glasson
+
+  LabelFrame:
+    text: Test Recipe Dispensing
+    weight: 1
+    column: 0
+    columnspan: 3
+    row: 1
+    Button:
+      - name: disp_ef_st
+        text: Still Elderflower
+        column: 0
+        row: 0
+        command: dispense
+      - name: disp_ef_sp
+        text: Sparkling Elderflower
+        column: 0
+        row: 1
+        command: dispense
+      - name: disp_rb_st
+        text: Still Raspberry
+        column: 0
+        row: 2
+        command: dispense
+      - name: disp_rb_sp
+        text: Sparkling Raspberry
+        column: 0
+        row: 3
+        command: dispense
+      - name: disp_w_st
+        text: Still Water
+        column: 0
+        row: 4
+        command: dispense
+      - name: disp_w_sp
+        text: Sparkling Water
+        column: 0
+        row: 5
+        command: dispense
+
+Label:
+  name: empty
+  text: " "
+  column: 0
+  row: 1
+  colweight: 1
+Button:
+  - name: exit
+    text: EXIT
+    column: 1
+    row: 1
+    command: destroy

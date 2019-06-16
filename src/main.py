@@ -11,6 +11,7 @@ from core.events import create_event, EventType, EventKey, json2evt, evt2json
 from core.reactor import ReactorThread
 from core.recipe import parse_recipes_list_file
 from core.user import parse_user_list_file
+from dbg.tester_gui import TesterGui
 from rfid.rfid import RfidThread
 
 abspath = os.path.abspath(__file__)
@@ -53,12 +54,12 @@ def main(args):
 
     core_th = ReactorThread(context)
     rfid_th = RfidThread(context.queue)
-    # gui_th = GuiThread(context.queue)
+    tester_th = TesterGui(context)
 
     try:
         core_th.start()
         rfid_th.start()
-        # gui_th.start()
+        tester_th.main()
 
         core_th.join()
         rfid_th.running = False
@@ -67,6 +68,7 @@ def main(args):
     except KeyboardInterrupt:
         evt = create_event(EventType.SIGINT)
         context.queue.put(evt)
+        tester_th.destroy()
 
     # gui_th.running = False
 

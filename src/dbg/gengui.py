@@ -465,7 +465,7 @@ class TkYaml(_TkParser):
         self.title(title)
 
         user_interface = yaml.load(open(filename)) if os.path.isfile(
-            filename) else yaml.loads(filename)
+            filename) else yaml.load(filename)
 
         self.create_widgets(self, user_interface)
         super().__init__(filename, title, preferTk)
