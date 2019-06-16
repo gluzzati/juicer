@@ -94,3 +94,7 @@ def new_recipe_handler(ctx, evt):
         return True, ctx.state
     else:
         return False, ctx.state
+
+
+def pour_completed_handler(ctx, evt):
+    return True, Context.State.GLASS_ON

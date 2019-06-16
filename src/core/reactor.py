@@ -50,7 +50,7 @@ class Reactor:
         self.add_handler(EventType.AUTO_WATEROFF, auto_wateroff_handler)
         self.add_handler(EventType.POUR_REQUESTED, pour_requested_handler)
         self.add_handler(EventType.NEW_RECIPE, new_recipe_handler)
-
+        self.add_handler(EventType.POUR_COMPLETED, pour_completed_handler)
 
         self.add_statecallback(Context.State.IDLE, on_idle)
         self.add_statecallback(Context.State.GLASS_ON, on_glass_on)
