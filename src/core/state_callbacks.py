@@ -46,28 +46,26 @@ class DispenseThread(Thread):
         start = time.time()
         elapsed = 0
 
-        while self.ctx.state == Context.State.POURING:
-            time.sleep(DT)
+        while self.ctx.state == Context.State.POURING and elapsed < total(self.recipe):
             elapsed = time.time() - start
-            # log.info("elapsed: " + str(elapsed))
 
             for tap in self.recipe.steps:
                 if tap_is_on(tap, elapsed, self.recipe):
                     self.relay_board.open(tap)
                 else:
                     self.relay_board.close(tap)
-                if elapsed > total(self.recipe):
-                    break
 
-            if elapsed > total(self.recipe):
-                self.relay_board.shut_all()
-                break
+            time.sleep(DT)
 
-        log.info("poured " + str(total_poured) + " CCs")
-        evt = create_event(EventType.POUR_COMPLETED)
-        evt["recipe"] = self.recipe
-        evt["total_poured"] = total_poured
-        self.ctx.queue.put(evt)
+        self.relay_board.shut_all()
+        log.debug("recipe ended")
+
+        if self.ctx.state == Context.State.POURING:
+            log.info("poured " + str(total_poured) + " CCs")
+            evt = create_event(EventType.POUR_COMPLETED)
+            evt["recipe"] = self.recipe
+            evt["total_poured"] = total_poured
+            self.ctx.queue.put(evt)
 
 
 

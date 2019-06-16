@@ -3,7 +3,7 @@ from time import strftime
 
 
 def timestamp():
-	return strftime("%Y-%m-%d %H:%M:%S")
+	return strftime("%H:%M:%S")
 
 
 class Colors:
@@ -59,11 +59,22 @@ logleveldict = {
 }
 
 loglevel = LVL_INFO
+dbg_ctx_ref = None
 
+
+def print_state(ctx):
+	ret = timestamp()
+	if ctx:
+		state = ctx.state
+		relays = ""
+		for relay in ctx.relay_board.relays:
+			relays += ("[" + relay + "]") if ctx.relay_board.relays[relay].pouring else ""
+		ret += " {} - {}".format(state, relays)
+	return ret
 
 def log(lvl, arg):
 	if lvl >= loglevel:
-		print("[{}] - {}".format(timestamp(), arg))
+		print("[{}] - {}".format(print_state(dbg_ctx_ref), arg))
 		sys.stdout.flush()
 
 

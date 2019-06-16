@@ -73,10 +73,14 @@ class Reactor:
             return False, None
 
     def change_state(self, next_state):
-        if next_state in self.callbacks:
+        if next_state not in self.callbacks:
+            log.error("unknown state " + str(next_state))
+            return False, self.ctx.state
+
+        if next_state != self.ctx.state:
             return self.callbacks[next_state](self.ctx)
         else:
-            log.error("unknown state " + str(next_state))
+            log.debug("already in the requested state")
             return False, self.ctx.state
 
     def run(self):

@@ -47,6 +47,7 @@ def main():
     context = Context(conf)
 
     log.loglevel = log.logleveldict[conf["log"]["level"]]
+    log.dbg_ctx_ref = context
 
     parse_users(context, conf["users"]["file"])
     parse_recipes(context, conf["recipes"]["file"])

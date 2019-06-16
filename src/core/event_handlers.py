@@ -32,10 +32,9 @@ def rfid_detected_handler(ctx, evt):
 
 def rfid_removed_handler(ctx, evt):
     log.debug("rfid removed handler")
+    ctx.relay_board.shut_all()  # emergency wateroff, bypasses normal procedure
     next_state = ctx.state
     if ctx.state in (Context.State.GLASS_ON, Context.State.POURING):
-        if ctx.state == Context.State.POURING:
-            ctx.relay_board.shut_all()  # emergency wateroff, bypasses normal procedure
         next_state = Context.State.IDLE
     else:
         log.debug("removed rfid, but there was no glass, mumble mumble... " + ctx.state)
