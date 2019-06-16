@@ -78,6 +78,9 @@ def pour_requested_handler(ctx, evt):
         else:
             log.error("unknown recipe \"" + recipe_name + "\"")
             return False, ctx.state
+    elif ctx.state is Context.State.POURING:
+        log.info("Already pouring - POUR button press ignored")
+        return True, ctx.state
     else:
         log.info("NO GLASS - POUR button press ignored")
         return True, ctx.state

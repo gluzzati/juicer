@@ -56,10 +56,10 @@ class DispenseThread(Thread):
                     self.relay_board.open(tap)
                 else:
                     self.relay_board.close(tap)
-                if elapsed > total(self.recipe) or not self.relay_board.pouring():
+                if elapsed > total(self.recipe):
                     break
 
-            if elapsed > total(self.recipe) or not self.relay_board.pouring():
+            if elapsed > total(self.recipe):
                 self.relay_board.shut_all()
                 break
 

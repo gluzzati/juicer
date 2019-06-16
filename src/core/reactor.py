@@ -14,6 +14,7 @@ def get_evt(ctx):
     log.debug("got evt type: " + evt[EventKey.type])
 
     if evt[EventKey.type] == EventType.SIGINT:
+        ctx.relay_board.shut_all()
         ctx.running = False
         return False, None
 

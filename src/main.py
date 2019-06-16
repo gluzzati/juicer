@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import argparse
 import configparser
 import os
 
@@ -41,7 +40,7 @@ def parse_recipes(ctx, file):
             ctx.queue.put(evt)
 
 
-def main(args):
+def main():
 
     conf = configparser.ConfigParser()
     conf.read("resources/config.ini")
@@ -70,9 +69,6 @@ def main(args):
         context.queue.put(evt)
         tester_th.destroy()
 
-    # gui_th.running = False
-
-    # gui_th.join()
     core_th.join()
     rfid_th.running = False
     rfid_th.join()
@@ -80,12 +76,4 @@ def main(args):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-e", "--endpoint", action="store", dest="host", help="Your AWS IoT custom endpoint")
-    parser.add_argument("-r", "--rootCA", action="store", dest="rootCAPath", help="Root CA file path")
-    parser.add_argument("-c", "--cert", action="store", dest="certificatePath", help="Certificate file path")
-    parser.add_argument("-k", "--key", action="store", dest="privateKeyPath", help="Private key file path")
-
-    args = parser.parse_args()
-
-    main(args)
+    main()
