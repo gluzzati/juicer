@@ -25,15 +25,11 @@ class Relay:
 
     def open(self):
         if self.pourer_pin:
-            if not self.pouring:
-                log.info("opening relay " + str(self.pourer_pin))
             self.pouring = True
             GPIO.output(self.pourer_pin, GPIO.LOW)
 
     def close(self):
         if self.pourer_pin:
-            if self.pouring:
-                log.info("closing relay " + str(self.pourer_pin))
             self.pouring = False
             GPIO.output(self.pourer_pin, GPIO.HIGH)
 
@@ -62,12 +58,18 @@ class RelayBoard:
 
     def open(self, name):
         if name in self.relays:
-            self.relays[name].open()
+            relay = self.relays[name]
+            if not relay.pouring:
+                log.info("opening relay " + name)
+            relay.open()
         else:
             log.error("no known tap for \"" + name + "\"")
 
     def close(self, name):
         if name in self.relays:
-            self.relays[name].close()
+            relay = self.relays[name]
+            if relay.pouring:
+                log.info("closing relay " + name)
+            relay.close()
         else:
             log.error("no known tap for \"" + name + "\"")

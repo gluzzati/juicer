@@ -3,7 +3,6 @@ from queue import Queue
 from core import log
 from core.database import Database
 from flow_meter.flowmeter import FlowMeter
-from gui.gui import GuiProxy
 from relay.relay import RelayBoard
 from scale.scale import Scale
 
@@ -35,7 +34,6 @@ class Context:
         self.valid = True
         self.config = config
         self.state = Context.State.UNINIT
-        self.gui = GuiProxy()
         self.database = Database()
         self.queue = Queue()
         self.user = None
